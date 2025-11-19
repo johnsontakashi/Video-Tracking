@@ -1,19 +1,12 @@
-from flask import Flask, jsonify
-from flask_cors import CORS
-from celery import Celery
-import os
+# Legacy app.py - kept for backward compatibility
+# Use run.py for the new authentication system
 
-def create_app():
-    app = Flask(__name__)
-    
-    # Configuration
-    app.config['CELERY_BROKER_URL'] = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
-    app.config['CELERY_RESULT_BACKEND'] = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
-    
-    # Enable CORS for React frontend
-    CORS(app, origins=['http://localhost:3001'])
-    
-    return app
+from run import app
+
+# Keep the original celery tasks for backward compatibility
+from celery import Celery
+from flask import jsonify
+import os
 
 def make_celery(app):
     celery = Celery(
@@ -31,31 +24,17 @@ def make_celery(app):
     celery.Task = ContextTask
     return celery
 
-app = create_app()
 celery = make_celery(app)
 
 @celery.task
 def hello_task(name):
     return f"Hello {name} from Celery!"
 
-@app.route('/api/hello', methods=['GET'])
-def hello():
-    return jsonify({'message': 'Hello World from Flask!'})
-
-@app.route('/api/hello-async/<name>', methods=['POST'])
-def hello_async(name):
-    task = hello_task.delay(name)
-    return jsonify({'task_id': task.id, 'status': 'Task started'})
-
-@app.route('/api/task/<task_id>', methods=['GET'])
-def get_task_result(task_id):
-    task = hello_task.AsyncResult(task_id)
-    if task.state == 'PENDING':
-        return jsonify({'state': task.state, 'status': 'Task is waiting...'})
-    elif task.state == 'SUCCESS':
-        return jsonify({'state': task.state, 'result': task.result})
-    else:
-        return jsonify({'state': task.state, 'status': str(task.info)})
+# Legacy routes moved to main.py
+# New endpoints available at /api/auth/* and /api/*
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Redirect to run.py
+    print("Please use 'python run.py' to start the application with authentication features")
+    import sys
+    sys.exit(1)

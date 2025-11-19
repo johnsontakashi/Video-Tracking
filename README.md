@@ -1,21 +1,31 @@
-# Video Tracking Project
+# 🎥 Video Tracking Project
 
-A full-stack "Hello World" application using React frontend, Flask backend, Celery task queue, and Redis.
+A comprehensive full-stack application with authentication, role-based access control, and beautiful UI.
 
-## Architecture
+## 🏗️ Architecture
 
-- **Frontend**: React with TypeScript
-- **Backend**: Flask (Python)
+- **Frontend**: React with TypeScript + Context API
+- **Backend**: Flask (Python) with JWT authentication
+- **Database**: PostgreSQL with SQLAlchemy ORM
 - **Task Queue**: Celery
 - **Message Broker**: Redis
 - **Containerization**: Docker & Docker Compose
 
-## Features
+## ✨ Features
 
-- Synchronous API endpoint (`/api/hello`)
-- Asynchronous task processing with Celery
-- Real-time task status polling
-- Dockerized development environment
+### 🔐 Authentication System
+- **JWT-based authentication** with access + refresh tokens
+- **Role-based access control** (Admin, Analyst, Guest)
+- **Password reset flow** with secure tokens
+- **Beautiful login/signup UI** with validation
+- **Rate limiting** and security features
+
+### 🎯 Core Features
+- **User management** with comprehensive profiles
+- **Protected routes** based on user roles
+- **Real-time dashboard** with role-specific content
+- **Asynchronous task processing** with Celery
+- **RESTful API** with comprehensive documentation
 
 ## Quick Start
 
@@ -32,51 +42,105 @@ docker-compose up --build
 
 ### Manual Setup
 
-#### Backend
+#### 1. Database Setup (PostgreSQL)
 ```bash
-cd backend
-pip install -r requirements.txt
-
-# Start Redis (required)
-redis-server
-
-# Start Flask app
-python app.py
-
-# Start Celery worker (in another terminal)
-celery -A app.celery worker --loglevel=info
+# Install PostgreSQL and create database
+createdb video_tracking_db
+psql video_tracking_db -c "CREATE USER video_user WITH PASSWORD 'secure_password';"
+psql video_tracking_db -c "GRANT ALL PRIVILEGES ON DATABASE video_tracking_db TO video_user;"
 ```
 
-#### Frontend
+#### 2. Backend Setup
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Set up environment
+cp .env.example .env
+# Edit .env with your database credentials
+
+# Initialize database with sample users
+python run.py init-db
+
+# Start the application
+python run.py
+```
+
+#### 3. Frontend Setup
 ```bash
 cd frontend
 npm install
 npm start
 ```
 
-## API Endpoints
+#### 4. Additional Services (Optional)
+```bash
+# Start Redis for Celery (if using async tasks)
+redis-server
 
-- `GET /api/hello` - Simple hello world message
-- `POST /api/hello-async/<name>` - Start async task
-- `GET /api/task/<task_id>` - Check task status
+# Start Celery worker (in another terminal)
+cd backend
+celery -A app.celery worker --loglevel=info
+```
 
-## Project Structure
+## 📚 Documentation
+
+- **[Complete Authentication Guide](AUTH_DOCUMENTATION.md)** - Detailed implementation guide
+- **API Documentation** - Available at `/api/auth/` endpoints
+- **Database Schema** - ERD diagram in documentation
+
+## 🔌 API Endpoints
+
+### Authentication
+- `POST /api/auth/signup` - User registration
+- `POST /api/auth/login` - User login
+- `POST /api/auth/logout` - User logout
+- `POST /api/auth/refresh` - Refresh access token
+- `POST /api/auth/request-password-reset` - Request password reset
+- `POST /api/auth/reset-password` - Reset password
+- `GET /api/auth/me` - Get current user info
+
+### Protected Routes
+- `GET /api/guest-area` - All authenticated users
+- `GET /api/analyst-area` - Analysts and admins only
+- `GET /api/admin-area` - Admins only
+
+## 🏗️ Project Structure
 
 ```
 ├── backend/
-│   ├── app.py              # Flask application
-│   ├── celery_worker.py    # Celery worker entry point
-│   ├── requirements.txt    # Python dependencies
-│   └── Dockerfile         # Backend container config
+│   ├── app/
+│   │   ├── models/         # Database models
+│   │   ├── routes/         # API routes
+│   │   ├── services/       # Business logic
+│   │   ├── middleware/     # Auth middleware
+│   │   └── utils/          # Utility functions
+│   ├── run.py             # Application entry point
+│   ├── config.py          # Configuration
+│   └── requirements.txt   # Python dependencies
 ├── frontend/
 │   ├── src/
-│   │   ├── App.tsx        # Main React component
-│   │   └── App.css        # Styling
-│   ├── package.json       # Node dependencies
-│   └── Dockerfile         # Frontend container config
+│   │   ├── components/    # React components
+│   │   ├── contexts/      # React contexts
+│   │   ├── services/      # API services
+│   │   └── utils/         # Utility functions
+│   └── package.json       # Node dependencies
 ├── docker-compose.yml     # Multi-service orchestration
+├── AUTH_DOCUMENTATION.md  # Complete auth guide
 └── README.md             # This file
 ```
+
+## 👥 Sample Users
+
+After running `python run.py init-db`, you can login with:
+
+- **Admin**: admin@videotracking.com / AdminPass123!
+- **Analyst**: analyst@videotracking.com / AnalystPass123!
+- **Guest**: guest@videotracking.com / GuestPass123!
 
 ## Development Notes
 
