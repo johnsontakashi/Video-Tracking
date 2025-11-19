@@ -40,10 +40,18 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
+    # Subscription fields
+    stripe_customer_id = db.Column(db.String(100), unique=True, index=True)
+    current_plan = db.Column(db.String(50), default='free')
+    subscription_expires_at = db.Column(db.DateTime)
+    username = db.Column(db.String(100), unique=True, index=True)
+    
     # Relationships
     refresh_tokens = db.relationship('RefreshToken', backref='user', cascade='all, delete-orphan')
     password_reset_tokens = db.relationship('PasswordResetToken', backref='user', cascade='all, delete-orphan')
     sessions = db.relationship('UserSession', backref='user', cascade='all, delete-orphan')
+    subscriptions = db.relationship('Subscription', backref='user', cascade='all, delete-orphan')
+    payments = db.relationship('Payment', backref='user', cascade='all, delete-orphan')
     
     def __init__(self, email, password, first_name, last_name, role=UserRole.GUEST):
         """Initialize user with hashed password."""
@@ -91,12 +99,15 @@ class User(db.Model):
         data = {
             'id': self.id,
             'email': self.email,
+            'username': self.username,
             'first_name': self.first_name,
             'last_name': self.last_name,
             'full_name': self.full_name,
             'role': self.role.value,
             'is_active': self.is_active,
             'email_verified': self.email_verified,
+            'current_plan': self.current_plan,
+            'subscription_expires_at': self.subscription_expires_at.isoformat() if self.subscription_expires_at else None,
             'last_login': self.last_login.isoformat() if self.last_login else None,
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
@@ -104,6 +115,7 @@ class User(db.Model):
         
         if include_sensitive:
             data['password_hash'] = self.password_hash
+            data['stripe_customer_id'] = self.stripe_customer_id
             
         return data
     

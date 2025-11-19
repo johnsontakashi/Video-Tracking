@@ -53,6 +53,11 @@ class Config:
     MAIL_USE_TLS = os.getenv('MAIL_USE_TLS', 'True').lower() == 'true'
     MAIL_USERNAME = os.getenv('MAIL_USERNAME')
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
+    
+    # Payment Configuration (Stripe)
+    STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+    STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+    STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
 
 class DevelopmentConfig(Config):
     """Development configuration."""
