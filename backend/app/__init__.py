@@ -37,9 +37,13 @@ def create_app(config_name='default'):
     # Register blueprints
     from app.routes.auth import auth_bp
     from app.routes.main import main_bp
+    from app.routes.collection_routes import collection_bp
+    from app.routes.analytics_routes import analytics_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(main_bp, url_prefix='/api')
+    app.register_blueprint(collection_bp)
+    app.register_blueprint(analytics_bp)
     
     # JWT token handlers
     from app.utils.jwt_handlers import configure_jwt_handlers
