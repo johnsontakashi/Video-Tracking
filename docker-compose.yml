@@ -1,54 +1,181 @@
 version: '3.8'
 
 services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: video_tracking_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: video_tracking_db
+      POSTGRES_USER: video_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-secure_password_change_in_production}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - video_tracking_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U video_user -d video_tracking_db"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis Cache & Message Broker
   redis:
     image: redis:7-alpine
+    container_name: video_tracking_redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD:-redis_password_change_in_production} --maxmemory 512mb --maxmemory-policy allkeys-lru
     ports:
       - "6379:6379"
-    command: redis-server --appendonly yes
     volumes:
       - redis_data:/data
+    networks:
+      - video_tracking_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
+  # Flask Backend API
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    ports:
-      - "5001:5000"
+    container_name: video_tracking_backend
+    restart: unless-stopped
     environment:
-      - FLASK_ENV=development
-      - REDIS_URL=redis://redis:6379/0
-    depends_on:
-      - redis
+      FLASK_ENV: ${FLASK_ENV:-production}
+      DATABASE_URL: postgresql://video_user:${POSTGRES_PASSWORD:-secure_password_change_in_production}@postgres:5432/video_tracking_db
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/0
+      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/0
+      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/1
+      SECRET_KEY: ${SECRET_KEY:-change_this_in_production}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change_this_in_production}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
+    ports:
+      - "5000:5000"
     volumes:
       - ./backend:/app
-    command: python app.py
+      - backend_logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - video_tracking_network
 
-  celery:
+  # Celery Worker for Background Tasks
+  celery_worker:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: video_tracking_celery_worker
+    restart: unless-stopped
+    command: celery -A celery_app.celery_app worker --loglevel=info --concurrency=4 --queues=collection,analytics,scheduler,maintenance
     environment:
-      - REDIS_URL=redis://redis:6379/0
-    depends_on:
-      - redis
-      - backend
+      FLASK_ENV: ${FLASK_ENV:-production}
+      DATABASE_URL: postgresql://video_user:${POSTGRES_PASSWORD:-secure_password_change_in_production}@postgres:5432/video_tracking_db
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/0
+      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/0
+      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/1
+      SECRET_KEY: ${SECRET_KEY:-change_this_in_production}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change_this_in_production}
     volumes:
       - ./backend:/app
-    command: celery -A app.celery worker --loglevel=info
+      - celery_logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - video_tracking_network
 
+  # Celery Beat Scheduler
+  celery_beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: video_tracking_celery_beat
+    restart: unless-stopped
+    command: celery -A celery_app.celery_app beat --loglevel=info --schedule=/tmp/celerybeat-schedule
+    environment:
+      FLASK_ENV: ${FLASK_ENV:-production}
+      DATABASE_URL: postgresql://video_user:${POSTGRES_PASSWORD:-secure_password_change_in_production}@postgres:5432/video_tracking_db
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/0
+      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/0
+      CELERY_RESULT_BACKEND: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/1
+      SECRET_KEY: ${SECRET_KEY:-change_this_in_production}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change_this_in_production}
+    volumes:
+      - ./backend:/app
+      - celery_beat_data:/tmp
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - video_tracking_network
+
+  # React Frontend
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    ports:
-      - "3001:3000"
+    container_name: video_tracking_frontend
+    restart: unless-stopped
     environment:
-      - REACT_APP_API_URL=http://localhost:5001
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    command: npm start
+      REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:5000/api}
+      REACT_APP_STRIPE_PUBLISHABLE_KEY: ${STRIPE_PUBLISHABLE_KEY}
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - video_tracking_network
+
+  # Monitoring - Flower (Celery monitoring)
+  flower:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: video_tracking_flower
+    restart: unless-stopped
+    command: celery -A celery_app.celery_app flower --port=5555
+    environment:
+      CELERY_BROKER_URL: redis://:${REDIS_PASSWORD:-redis_password_change_in_production}@redis:6379/0
+      FLOWER_BASIC_AUTH: ${FLOWER_USER:-admin}:${FLOWER_PASSWORD:-flower_password_change}
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+    networks:
+      - video_tracking_network
 
 volumes:
+  postgres_data:
+    driver: local
   redis_data:
+    driver: local
+  backend_logs:
+    driver: local
+  celery_logs:
+    driver: local
+  celery_beat_data:
+    driver: local
+
+networks:
+  video_tracking_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
