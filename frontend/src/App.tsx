@@ -1,7 +1,9 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import AuthPage from './components/Auth/AuthPage';
-import Dashboard from './components/Dashboard';
+import AdminDashboard from './components/Admin/AdminDashboard';
+import UserDashboard from './components/User/UserDashboard';
 import './App.css';
 
 // Loading component
@@ -14,24 +16,107 @@ const LoadingScreen: React.FC = () => (
   </div>
 );
 
-// Main app content component
-const AppContent: React.FC = () => {
+// Role-based Dashboard Router
+const DashboardRouter: React.FC = () => {
+  const { user, loading } = useAuth();
+
+  if (loading || !user) {
+    return <LoadingScreen />;
+  }
+
+  // Redirect to appropriate dashboard based on user role
+  if (user.role === 'admin') {
+    return <AdminDashboard />;
+  } else {
+    // guest, analyst, and other roles go to UserDashboard
+    return <UserDashboard />;
+  }
+};
+
+// Protected Route component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
     return <LoadingScreen />;
   }
 
-  return isAuthenticated ? <Dashboard /> : <AuthPage />;
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" replace />;
+};
+
+// Admin-only Route component
+const AdminRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated, user, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user?.role !== 'admin') {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+// Public Route component (redirects to dashboard if already authenticated)
+const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
+  return !isAuthenticated ? <>{children}</> : <Navigate to="/dashboard" replace />;
 };
 
 // Main App component
 function App() {
   return (
     <AuthProvider>
-      <div className="App">
-        <AppContent />
-      </div>
+      <Router>
+        <div className="App">
+          <Routes>
+            <Route 
+              path="/login" 
+              element={
+                <PublicRoute>
+                  <AuthPage />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <DashboardRouter />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin" 
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              } 
+            />
+            <Route 
+              path="/user" 
+              element={
+                <ProtectedRoute>
+                  <UserDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          </Routes>
+        </div>
+      </Router>
     </AuthProvider>
   );
 }
