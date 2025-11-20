@@ -39,8 +39,8 @@
   border-radius: var(--politikos-radius-xl);
   box-shadow: var(--politikos-shadow-lg);
   width: 100%;
-  max-width: 480px;
-  padding: var(--politikos-spacing-3xl);
+  max-width: 600px;
+  padding: var(--politikos-spacing-2xl);
   border: 2px solid rgba(0, 0, 204, 0.1);
   position: relative;
   overflow: hidden;
@@ -85,12 +85,19 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+  width: 100%;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+  width: 100%;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
 }
 
 .form-label {
@@ -106,6 +113,8 @@
   font-size: 1rem;
   transition: all 0.2s ease;
   background: white;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-input:focus {
@@ -124,6 +133,7 @@
 
 .password-input-container {
   position: relative;
+  width: 100%;
 }
 
 .password-toggle {
