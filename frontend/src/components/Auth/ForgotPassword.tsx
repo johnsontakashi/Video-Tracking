@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import authService from '../../services/authService';
+import PolitikosLogo from '../Brand/PolitikosLogo';
 import './Auth.css';
 
 interface ForgotPasswordProps {
@@ -37,14 +38,15 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onSwitchToLogin }) => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h2 className="auth-title">Forgot Password</h2>
-          <p className="auth-subtitle">Enter your email to reset your password</p>
+          <PolitikosLogo size="large" withProtection={true} className="auth-logo" />
+          <h2 className="auth-title">Esqueceu sua Senha?</h2>
+          <p className="auth-subtitle">Digite seu email para redefinir sua senha</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="email" className="form-label">
-              Email Address
+              Endereço de Email
             </label>
             <input
               type="email"
@@ -53,7 +55,7 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onSwitchToLogin }) => {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="form-input"
-              placeholder="Enter your email"
+              placeholder="Digite seu email"
               autoComplete="email"
             />
           </div>
@@ -78,20 +80,20 @@ const ForgotPassword: React.FC<ForgotPasswordProps> = ({ onSwitchToLogin }) => {
             {loading ? (
               <span className="loading-spinner">⌛</span>
             ) : (
-              'Send Reset Instructions'
+              'Enviar Instruções'
             )}
           </button>
         </form>
 
         <div className="auth-footer">
           <p className="auth-switch">
-            Remember your password?{' '}
+            Lembrou sua senha?{' '}
             <button
               type="button"
               onClick={onSwitchToLogin}
               className="link-button"
             >
-              Back to sign in
+              Voltar ao login
             </button>
           </p>
         </div>

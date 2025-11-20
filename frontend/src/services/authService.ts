@@ -264,6 +264,19 @@ class AuthService {
     }
   }
 
+  async validateResetToken(token: string): Promise<AuthResponse & { user_email?: string }> {
+    try {
+      const response: AuthResponse & { user_email?: string } = await this.request('/api/auth/validate-reset-token', {
+        method: 'POST',
+        body: JSON.stringify({ token }),
+      });
+
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async changePassword(currentPassword: string, newPassword: string): Promise<AuthResponse> {
     try {
       const response: AuthResponse = await this.request('/api/auth/change-password', {

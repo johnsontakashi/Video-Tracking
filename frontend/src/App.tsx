@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import AuthPage from './components/Auth/AuthPage';
+import ResetPassword from './components/Auth/ResetPassword';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import UserDashboard from './components/User/UserDashboard';
 import './App.css';
@@ -102,6 +103,14 @@ function App() {
               element={
                 <PublicRoute>
                   <AuthPage />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="/reset-password" 
+              element={
+                <PublicRoute>
+                  <ResetPassword />
                 </PublicRoute>
               } 
             />
