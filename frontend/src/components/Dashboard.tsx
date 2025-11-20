@@ -1,442 +1,211 @@
 import React, { useState, useEffect } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { Card, Row, Col, Button, Modal, Select, Spin, notification } from 'antd';
+import { Card, Row, Col, Button, Spin } from 'antd';
 import { 
   PlusOutlined, 
-  SettingOutlined, 
-  DragOutlined,
-  TrophyOutlined,
-  LineChartOutlined,
   BarChartOutlined,
   PieChartOutlined,
   FireOutlined,
   HeartOutlined
 } from '@ant-design/icons';
-import { useDrag, useDrop } from 'react-dnd';
 
-import InfluenceLeaderboardWidget from './widgets/InfluenceLeaderboardWidget';
-import SentimentOverviewWidget from './widgets/SentimentOverviewWidget';
-import TrendingTopicsWidget from './widgets/TrendingTopicsWidget';
-import AnalyticsStatsWidget from './widgets/AnalyticsStatsWidget';
-import EngagementTrendsWidget from './widgets/EngagementTrendsWidget';
-import CollectionStatsWidget from './widgets/CollectionStatsWidget';
-
-import { analyticsService } from '../services/analyticsService';
-import { collectionService } from '../services/collectionService';
-
-const { Option } = Select;
+// Simple static widgets for now
+const SimpleWidget: React.FC<{ title: string; content: string; color: string }> = ({ title, content, color }) => (
+  <Card 
+    title={title}
+    style={{ 
+      marginBottom: 16,
+      borderTop: `4px solid ${color}`
+    }}
+    size="small"
+  >
+    <div style={{ textAlign: 'center', padding: '20px 0' }}>
+      <div style={{ fontSize: '24px', fontWeight: 'bold', color }}>{content}</div>
+      <div style={{ color: '#666', marginTop: 8 }}>Sample Data</div>
+    </div>
+  </Card>
+);
 
 interface Widget {
   id: string;
   type: string;
   title: string;
-  position: { x: number; y: number; width: number; height: number };
-  config: any;
+  content: string;
+  color: string;
+  span: number;
 }
-
-interface DashboardData {
-  summary: any;
-  trending_topics: any[];
-  top_performers: any[];
-  sentiment_trends: any[];
-}
-
-const WIDGET_TYPES = [
-  { 
-    type: 'influence-leaderboard', 
-    title: 'Influence Leaderboard', 
-    icon: <TrophyOutlined />,
-    description: 'Top influencers by influence score'
-  },
-  { 
-    type: 'sentiment-overview', 
-    title: 'Sentiment Overview', 
-    icon: <HeartOutlined />,
-    description: 'Sentiment analysis distribution'
-  },
-  { 
-    type: 'trending-topics', 
-    title: 'Trending Topics', 
-    icon: <FireOutlined />,
-    description: 'Currently trending hashtags and topics'
-  },
-  { 
-    type: 'analytics-stats', 
-    title: 'Analytics Statistics', 
-    icon: <BarChartOutlined />,
-    description: 'General analytics statistics'
-  },
-  { 
-    type: 'engagement-trends', 
-    title: 'Engagement Trends', 
-    icon: <LineChartOutlined />,
-    description: 'Engagement rate trends over time'
-  },
-  { 
-    type: 'collection-stats', 
-    title: 'Collection Status', 
-    icon: <PieChartOutlined />,
-    description: 'Data collection statistics'
-  }
-];
-
-const DraggableWidget: React.FC<{
-  widget: Widget;
-  onMove: (id: string, position: any) => void;
-  onRemove: (id: string) => void;
-  children: React.ReactNode;
-}> = ({ widget, onMove, onRemove, children }) => {
-  const [{ isDragging }, drag] = useDrag({
-    type: 'widget',
-    item: { id: widget.id, type: widget.type },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
-
-  return (
-    <div
-      ref={drag}
-      style={{
-        opacity: isDragging ? 0.5 : 1,
-        cursor: 'move',
-        position: 'relative',
-        height: '100%'
-      }}
-    >
-      <Card
-        title={
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <DragOutlined />
-            {widget.title}
-          </div>
-        }
-        extra={
-          <Button 
-            type="text" 
-            size="small"
-            onClick={() => onRemove(widget.id)}
-          >
-            ✕
-          </Button>
-        }
-        style={{ height: '100%' }}
-        bodyStyle={{ padding: '12px' }}
-      >
-        {children}
-      </Card>
-    </div>
-  );
-};
-
-const DropZone: React.FC<{
-  onDrop: (item: any, monitor: any) => void;
-  children: React.ReactNode;
-}> = ({ onDrop, children }) => {
-  const [{ canDrop, isOver }, drop] = useDrop({
-    accept: 'widget',
-    drop: onDrop,
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
-    }),
-  });
-
-  return (
-    <div
-      ref={drop}
-      style={{
-        minHeight: '600px',
-        backgroundColor: isOver ? '#f0f0f0' : 'transparent',
-        border: canDrop ? '2px dashed #1890ff' : '2px dashed transparent',
-        borderRadius: '8px',
-        padding: '16px'
-      }}
-    >
-      {children}
-    </div>
-  );
-};
 
 const Dashboard: React.FC = () => {
-  const [widgets, setWidgets] = useState<Widget[]>([]);
-  const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [addWidgetModalVisible, setAddWidgetModalVisible] = useState(false);
-  const [selectedWidgetType, setSelectedWidgetType] = useState<string>('');
+  const [widgets] = useState<Widget[]>([
+    {
+      id: '1',
+      type: 'stats',
+      title: 'Total Influencers',
+      content: '1,234',
+      color: '#1890ff',
+      span: 6
+    },
+    {
+      id: '2',
+      type: 'stats',
+      title: 'Active Collections',
+      content: '56',
+      color: '#52c41a',
+      span: 6
+    },
+    {
+      id: '3',
+      type: 'stats',
+      title: 'Analytics Processed',
+      content: '98.5%',
+      color: '#722ed1',
+      span: 6
+    },
+    {
+      id: '4',
+      type: 'stats',
+      title: 'Sentiment Score',
+      content: '8.2/10',
+      color: '#eb2f96',
+      span: 6
+    }
+  ]);
 
   useEffect(() => {
-    loadDashboardData();
-    loadWidgetLayout();
-  }, []);
-
-  const loadDashboardData = async () => {
-    try {
-      setLoading(true);
-      const data = await analyticsService.getDashboard();
-      setDashboardData(data);
-    } catch (error) {
-      console.error('Error loading dashboard data:', error);
-      notification.error({
-        message: 'Error',
-        description: 'Failed to load dashboard data'
-      });
-    } finally {
+    // Simulate loading
+    const timer = setTimeout(() => {
       setLoading(false);
-    }
-  };
+    }, 1000);
 
-  const loadWidgetLayout = () => {
-    const savedLayout = localStorage.getItem('dashboard_layout');
-    if (savedLayout) {
-      try {
-        setWidgets(JSON.parse(savedLayout));
-      } catch (error) {
-        console.error('Error loading widget layout:', error);
-        // Set default layout
-        setDefaultWidgets();
-      }
-    } else {
-      setDefaultWidgets();
-    }
-  };
-
-  const setDefaultWidgets = () => {
-    const defaultWidgets: Widget[] = [
-      {
-        id: 'analytics-stats-1',
-        type: 'analytics-stats',
-        title: 'Analytics Overview',
-        position: { x: 0, y: 0, width: 12, height: 200 },
-        config: {}
-      },
-      {
-        id: 'influence-leaderboard-1',
-        type: 'influence-leaderboard',
-        title: 'Top Influencers',
-        position: { x: 0, y: 1, width: 8, height: 400 },
-        config: { limit: 10 }
-      },
-      {
-        id: 'sentiment-overview-1',
-        type: 'sentiment-overview',
-        title: 'Sentiment Analysis',
-        position: { x: 8, y: 1, width: 4, height: 400 },
-        config: { days_back: 7 }
-      },
-      {
-        id: 'trending-topics-1',
-        type: 'trending-topics',
-        title: 'Trending Now',
-        position: { x: 0, y: 2, width: 6, height: 350 },
-        config: { limit: 8 }
-      },
-      {
-        id: 'collection-stats-1',
-        type: 'collection-stats',
-        title: 'Collection Status',
-        position: { x: 6, y: 2, width: 6, height: 350 },
-        config: {}
-      }
-    ];
-    
-    setWidgets(defaultWidgets);
-  };
-
-  const saveWidgetLayout = (newWidgets: Widget[]) => {
-    localStorage.setItem('dashboard_layout', JSON.stringify(newWidgets));
-    setWidgets(newWidgets);
-  };
-
-  const addWidget = () => {
-    if (!selectedWidgetType) return;
-
-    const widgetType = WIDGET_TYPES.find(type => type.type === selectedWidgetType);
-    if (!widgetType) return;
-
-    const newWidget: Widget = {
-      id: `${selectedWidgetType}-${Date.now()}`,
-      type: selectedWidgetType,
-      title: widgetType.title,
-      position: { x: 0, y: widgets.length, width: 6, height: 300 },
-      config: {}
-    };
-
-    const updatedWidgets = [...widgets, newWidget];
-    saveWidgetLayout(updatedWidgets);
-    setAddWidgetModalVisible(false);
-    setSelectedWidgetType('');
-  };
-
-  const removeWidget = (widgetId: string) => {
-    const updatedWidgets = widgets.filter(w => w.id !== widgetId);
-    saveWidgetLayout(updatedWidgets);
-  };
-
-  const moveWidget = (widgetId: string, newPosition: any) => {
-    const updatedWidgets = widgets.map(w =>
-      w.id === widgetId ? { ...w, position: { ...w.position, ...newPosition } } : w
-    );
-    saveWidgetLayout(updatedWidgets);
-  };
-
-  const handleDrop = (item: any, monitor: any) => {
-    // Handle widget reordering/repositioning
-    const dropResult = monitor.getDropResult();
-    if (item && dropResult) {
-      // Calculate new position based on drop location
-      const newPosition = {
-        x: Math.floor(Math.random() * 8), // Simplified positioning
-        y: Math.floor(Math.random() * 10)
-      };
-      moveWidget(item.id, newPosition);
-    }
-  };
-
-  const renderWidget = (widget: Widget) => {
-    if (!dashboardData) return null;
-
-    const commonProps = {
-      data: dashboardData,
-      config: widget.config
-    };
-
-    switch (widget.type) {
-      case 'influence-leaderboard':
-        return <InfluenceLeaderboardWidget {...commonProps} />;
-      case 'sentiment-overview':
-        return <SentimentOverviewWidget {...commonProps} />;
-      case 'trending-topics':
-        return <TrendingTopicsWidget {...commonProps} />;
-      case 'analytics-stats':
-        return <AnalyticsStatsWidget {...commonProps} />;
-      case 'engagement-trends':
-        return <EngagementTrendsWidget {...commonProps} />;
-      case 'collection-stats':
-        return <CollectionStatsWidget {...commonProps} />;
-      default:
-        return <div>Unknown widget type: {widget.type}</div>;
-    }
-  };
+    return () => clearTimeout(timer);
+  }, []);
 
   if (loading) {
     return (
-      <div style={{ textAlign: 'center', padding: '50px' }}>
-        <Spin size="large" />
-        <p>Loading dashboard...</p>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '60vh' 
+      }}>
+        <Spin size="large" tip="Loading Dashboard..." />
       </div>
     );
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div style={{ padding: '24px' }}>
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          marginBottom: '24px' 
-        }}>
-          <h1>Analytics Dashboard</h1>
-          <div>
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={() => setAddWidgetModalVisible(true)}
-              style={{ marginRight: '8px' }}
-            >
-              Add Widget
-            </Button>
-            <Button
-              icon={<SettingOutlined />}
-              onClick={() => setDefaultWidgets()}
-            >
-              Reset Layout
-            </Button>
+    <div style={{ padding: '24px' }}>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center',
+        marginBottom: 24 
+      }}>
+        <h2 style={{ margin: 0 }}>
+          <BarChartOutlined style={{ marginRight: 8 }} />
+          Analytics Dashboard
+        </h2>
+        <Button 
+          type="primary" 
+          icon={<PlusOutlined />}
+          onClick={() => console.log('Add widget clicked')}
+        >
+          Add Widget
+        </Button>
+      </div>
+
+      <Row gutter={[16, 16]}>
+        {widgets.map((widget) => (
+          <Col key={widget.id} span={widget.span}>
+            <SimpleWidget 
+              title={widget.title}
+              content={widget.content}
+              color={widget.color}
+            />
+          </Col>
+        ))}
+      </Row>
+
+      <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+        <Col span={12}>
+          <Card 
+            title={
+              <span>
+                <PieChartOutlined style={{ marginRight: 8 }} />
+                Sentiment Overview
+              </span>
+            }
+            size="small"
+          >
+            <div style={{ textAlign: 'center', padding: '40px 0' }}>
+              <div style={{ fontSize: '18px', color: '#52c41a' }}>😊 Positive: 68%</div>
+              <div style={{ fontSize: '18px', color: '#faad14', margin: '8px 0' }}>😐 Neutral: 22%</div>
+              <div style={{ fontSize: '18px', color: '#ff4d4f' }}>😞 Negative: 10%</div>
+            </div>
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card 
+            title={
+              <span>
+                <FireOutlined style={{ marginRight: 8 }} />
+                Trending Topics
+              </span>
+            }
+            size="small"
+          >
+            <div style={{ padding: '20px 0' }}>
+              <div style={{ marginBottom: 12 }}>
+                <span style={{ fontWeight: 'bold' }}>#TechInnovation</span>
+                <span style={{ float: 'right', color: '#52c41a' }}>↗ +15%</span>
+              </div>
+              <div style={{ marginBottom: 12 }}>
+                <span style={{ fontWeight: 'bold' }}>#SustainableLiving</span>
+                <span style={{ float: 'right', color: '#52c41a' }}>↗ +8%</span>
+              </div>
+              <div style={{ marginBottom: 12 }}>
+                <span style={{ fontWeight: 'bold' }}>#DigitalMarketing</span>
+                <span style={{ float: 'right', color: '#ff4d4f' }}>↘ -3%</span>
+              </div>
+              <div>
+                <span style={{ fontWeight: 'bold' }}>#AITrends</span>
+                <span style={{ float: 'right', color: '#52c41a' }}>↗ +22%</span>
+              </div>
+            </div>
+          </Card>
+        </Col>
+      </Row>
+
+      <Card 
+        title={
+          <span>
+            <HeartOutlined style={{ marginRight: 8 }} />
+            Recent Activity
+          </span>
+        }
+        style={{ marginTop: 16 }}
+        size="small"
+      >
+        <div style={{ padding: '20px 0' }}>
+          <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between' }}>
+            <span>@techguru123 - New analytics processed</span>
+            <span style={{ color: '#666' }}>2 minutes ago</span>
+          </div>
+          <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between' }}>
+            <span>@lifestyle_blogger - Sentiment analysis complete</span>
+            <span style={{ color: '#666' }}>5 minutes ago</span>
+          </div>
+          <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'space-between' }}>
+            <span>@fitness_influencer - Data collection started</span>
+            <span style={{ color: '#666' }}>1 hour ago</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>System: Weekly analytics report generated</span>
+            <span style={{ color: '#666' }}>3 hours ago</span>
           </div>
         </div>
-
-        <DropZone onDrop={handleDrop}>
-          <Row gutter={[16, 16]}>
-            {widgets.map(widget => (
-              <Col
-                key={widget.id}
-                xs={24}
-                sm={12}
-                md={widget.position.width || 6}
-                lg={widget.position.width || 6}
-                xl={widget.position.width || 6}
-              >
-                <div style={{ height: widget.position.height || 300 }}>
-                  <DraggableWidget
-                    widget={widget}
-                    onMove={moveWidget}
-                    onRemove={removeWidget}
-                  >
-                    {renderWidget(widget)}
-                  </DraggableWidget>
-                </div>
-              </Col>
-            ))}
-          </Row>
-        </DropZone>
-
-        {widgets.length === 0 && (
-          <div style={{ 
-            textAlign: 'center', 
-            padding: '50px',
-            border: '2px dashed #d9d9d9',
-            borderRadius: '8px'
-          }}>
-            <PlusOutlined style={{ fontSize: '48px', color: '#d9d9d9' }} />
-            <h3>No widgets added</h3>
-            <p>Click "Add Widget" to start customizing your dashboard</p>
-            <Button 
-              type="primary" 
-              onClick={() => setAddWidgetModalVisible(true)}
-            >
-              Add Your First Widget
-            </Button>
-          </div>
-        )}
-
-        <Modal
-          title="Add Widget"
-          visible={addWidgetModalVisible}
-          onOk={addWidget}
-          onCancel={() => {
-            setAddWidgetModalVisible(false);
-            setSelectedWidgetType('');
-          }}
-          okButtonProps={{ disabled: !selectedWidgetType }}
-        >
-          <div style={{ marginBottom: '16px' }}>
-            <label>Select widget type:</label>
-            <Select
-              style={{ width: '100%', marginTop: '8px' }}
-              placeholder="Choose a widget type"
-              value={selectedWidgetType}
-              onChange={setSelectedWidgetType}
-            >
-              {WIDGET_TYPES.map(type => (
-                <Option key={type.type} value={type.type}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    {type.icon}
-                    <div>
-                      <div style={{ fontWeight: 'bold' }}>{type.title}</div>
-                      <div style={{ fontSize: '12px', color: '#666' }}>
-                        {type.description}
-                      </div>
-                    </div>
-                  </div>
-                </Option>
-              ))}
-            </Select>
-          </div>
-        </Modal>
-      </div>
-    </DndProvider>
+      </Card>
+    </div>
   );
 };
 

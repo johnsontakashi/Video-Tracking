@@ -27,7 +27,7 @@ class CollectionService {
   constructor() {
     // Add auth interceptor
     this.api.interceptors.request.use((config) => {
-      const token = authService.getToken();
+      const token = authService.getAccessToken();
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       }

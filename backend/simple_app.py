@@ -9,7 +9,7 @@ users = [
     {
         'id': 1, 
         'email': 'admin@videotracking.com', 
-        'password': 'AdminPass123!',
+        'password': 'AdminPass123',
         'first_name': 'Admin',
         'last_name': 'User',
         'role': 'admin'
@@ -17,7 +17,7 @@ users = [
     {
         'id': 2, 
         'email': 'test@example.com', 
-        'password': 'TestPass123!',
+        'password': 'TestPass123',
         'first_name': 'Test',
         'last_name': 'User',
         'role': 'guest'
@@ -31,7 +31,10 @@ def hello():
 @app.route('/api/auth/signup', methods=['POST'])
 def signup():
     try:
-        data = request.get_json()
+        # Handle JSON parsing more robustly
+        data = request.get_json(force=True)
+        if not data:
+            data = request.json
         
         # Basic validation
         if not data or not data.get('email') or not data.get('password'):
@@ -80,7 +83,23 @@ def signup():
 @app.route('/api/auth/login', methods=['POST'])
 def login():
     try:
-        data = request.get_json()
+        # Handle JSON parsing more robustly
+        try:
+            data = request.get_json()
+        except Exception as json_error:
+            print(f"JSON parsing error: {str(json_error)}")
+            print(f"Raw data: {request.data}")
+            # Try alternative parsing
+            import json
+            try:
+                data = json.loads(request.data.decode('utf-8'))
+            except Exception as alt_error:
+                print(f"Alternative parsing error: {str(alt_error)}")
+                return jsonify({
+                    'success': False,
+                    'error': 'json_parse_error',
+                    'message': 'Could not parse JSON request'
+                }), 400
         
         if not data or not data.get('email') or not data.get('password'):
             return jsonify({
@@ -119,10 +138,13 @@ def login():
         }), 200
         
     except Exception as e:
+        print(f"Login error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({
             'success': False,
             'error': 'internal_error',
-            'message': 'Login failed'
+            'message': f'Login failed: {str(e)}'
         }), 500
 
 @app.route('/api/auth/me', methods=['GET'])
@@ -152,8 +174,8 @@ def logout():
 if __name__ == '__main__':
     print("🚀 Starting simple Flask server...")
     print("📧 Sample users:")
-    print("   - admin@videotracking.com / AdminPass123!")
-    print("   - test@example.com / TestPass123!")
+    print("   - admin@videotracking.com / AdminPass123")
+    print("   - test@example.com / TestPass123")
     print("🌐 Frontend: http://localhost:3000")
     print("🔧 Backend: http://localhost:5000")
     
