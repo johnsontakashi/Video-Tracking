@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import PolitikosLogo, { PolitikosLogoText } from '../Brand/PolitikosLogo';
 import './Auth.css';
@@ -16,6 +17,7 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onSwitchToForgotPassword }) => {
   const { login, loading, error } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
@@ -33,7 +35,13 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onSwitchToForgotPasswor
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(formData.email, formData.password, formData.rememberMe);
+    try {
+      await login(formData.email, formData.password, formData.rememberMe);
+      navigate('/dashboard');
+    } catch (error) {
+      // Error is handled by the login function in AuthContext
+      console.error('Login failed:', error);
+    }
   };
 
   return (

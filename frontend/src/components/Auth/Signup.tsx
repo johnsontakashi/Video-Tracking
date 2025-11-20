@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import PolitikosLogo from '../Brand/PolitikosLogo';
 import './Auth.css';
 
 interface SignupFormData {
@@ -16,6 +18,7 @@ interface SignupProps {
 
 const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
   const { signup, loading, error } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<SignupFormData>({
     email: '',
     password: '',
@@ -83,12 +86,19 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
       return;
     }
 
-    await signup(
-      formData.email,
-      formData.password,
-      formData.firstName,
-      formData.lastName
-    );
+    try {
+      await signup(
+        formData.email,
+        formData.password,
+        formData.firstName,
+        formData.lastName
+      );
+      // After successful signup, redirect to login
+      navigate('/login');
+    } catch (error) {
+      // Error is handled by the signup function in AuthContext
+      console.error('Signup failed:', error);
+    }
   };
 
   const getPasswordStrength = (password: string): string => {
@@ -104,15 +114,16 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h2 className="auth-title">Create Account</h2>
-          <p className="auth-subtitle">Join Video Tracking today</p>
+          <PolitikosLogo size="large" withProtection={true} className="auth-logo" />
+          <h2 className="auth-title">Criar Conta POLITIKOS</h2>
+          <p className="auth-subtitle">Junte-se à análise política brasileira</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="firstName" className="form-label">
-                First Name
+                Nome
               </label>
               <input
                 type="text"
@@ -122,7 +133,7 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
                 onChange={handleChange}
                 required
                 className={`form-input ${validationErrors.firstName ? 'error' : ''}`}
-                placeholder="Enter your first name"
+                placeholder="Digite seu nome"
                 autoComplete="given-name"
               />
               {validationErrors.firstName && (
@@ -132,7 +143,7 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
 
             <div className="form-group">
               <label htmlFor="lastName" className="form-label">
-                Last Name
+                Sobrenome
               </label>
               <input
                 type="text"
@@ -142,7 +153,7 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
                 onChange={handleChange}
                 required
                 className={`form-input ${validationErrors.lastName ? 'error' : ''}`}
-                placeholder="Enter your last name"
+                placeholder="Digite seu sobrenome"
                 autoComplete="family-name"
               />
               {validationErrors.lastName && (
@@ -151,87 +162,91 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="email" className="form-label">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className={`form-input ${validationErrors.email ? 'error' : ''}`}
-              placeholder="Enter your email"
-              autoComplete="email"
-            />
-            {validationErrors.email && (
-              <span className="field-error">{validationErrors.email}</span>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <div className="password-input-container">
+          <div className="form-row">
+            <div className="form-group form-group-full">
+              <label htmlFor="email" className="form-label">
+                Endereço de Email
+              </label>
               <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                name="password"
-                value={formData.password}
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 required
-                className={`form-input ${validationErrors.password ? 'error' : ''}`}
-                placeholder="Enter your password"
-                autoComplete="new-password"
+                className={`form-input ${validationErrors.email ? 'error' : ''}`}
+                placeholder="Digite seu email"
+                autoComplete="email"
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="password-toggle"
-              >
-                {showPassword ? '🙈' : '👁️'}
-              </button>
+              {validationErrors.email && (
+                <span className="field-error">{validationErrors.email}</span>
+              )}
             </div>
-            {passwordStrength && (
-              <div className={`password-strength ${passwordStrength}`}>
-                Password strength: <span>{passwordStrength}</span>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="password" className="form-label">
+                Senha
+              </label>
+              <div className="password-input-container">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  className={`form-input ${validationErrors.password ? 'error' : ''}`}
+                  placeholder="Digite sua senha"
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="password-toggle"
+                >
+                  {showPassword ? '🙈' : '👁️'}
+                </button>
               </div>
-            )}
-            {validationErrors.password && (
-              <span className="field-error">{validationErrors.password}</span>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="confirmPassword" className="form-label">
-              Confirm Password
-            </label>
-            <div className="password-input-container">
-              <input
-                type={showConfirmPassword ? 'text' : 'password'}
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-                className={`form-input ${validationErrors.confirmPassword ? 'error' : ''}`}
-                placeholder="Confirm your password"
-                autoComplete="new-password"
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="password-toggle"
-              >
-                {showConfirmPassword ? '🙈' : '👁️'}
-              </button>
+              {passwordStrength && (
+                <div className={`password-strength ${passwordStrength}`}>
+                  Password strength: <span>{passwordStrength}</span>
+                </div>
+              )}
+              {validationErrors.password && (
+                <span className="field-error">{validationErrors.password}</span>
+              )}
             </div>
-            {validationErrors.confirmPassword && (
-              <span className="field-error">{validationErrors.confirmPassword}</span>
-            )}
+
+            <div className="form-group">
+              <label htmlFor="confirmPassword" className="form-label">
+                Confirmar Senha
+              </label>
+              <div className="password-input-container">
+                <input
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                  className={`form-input ${validationErrors.confirmPassword ? 'error' : ''}`}
+                  placeholder="Confirme sua senha"
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="password-toggle"
+                >
+                  {showConfirmPassword ? '🙈' : '👁️'}
+                </button>
+              </div>
+              {validationErrors.confirmPassword && (
+                <span className="field-error">{validationErrors.confirmPassword}</span>
+              )}
+            </div>
           </div>
 
           {error && (
@@ -248,20 +263,20 @@ const Signup: React.FC<SignupProps> = ({ onSwitchToLogin }) => {
             {loading ? (
               <span className="loading-spinner">⌛</span>
             ) : (
-              'Create Account'
+              'Criar Conta'
             )}
           </button>
         </form>
 
         <div className="auth-footer">
           <p className="auth-switch">
-            Already have an account?{' '}
+            Já tem uma conta?{' '}
             <button
               type="button"
               onClick={onSwitchToLogin}
               className="link-button"
             >
-              Sign in
+              Entrar
             </button>
           </p>
         </div>
