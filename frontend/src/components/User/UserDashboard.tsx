@@ -11,6 +11,7 @@ import {
   FireOutlined,
   ThunderboltOutlined
 } from '@ant-design/icons';
+import PolitikosLogo, { PolitikosLogoText } from '../Brand/PolitikosLogo';
 import './UserDashboard.css';
 
 const UserDashboard: React.FC = () => {
@@ -32,8 +33,11 @@ const UserDashboard: React.FC = () => {
     <div className="user-dashboard">
       <header className="user-header">
         <div className="user-header-left">
-          <BarChartOutlined style={{ fontSize: '24px', marginRight: '12px' }} />
-          <h1>Analytics Dashboard</h1>
+          <PolitikosLogoText size="large" className="user-logo" />
+          <div className="user-title">
+            <h1>Análises Políticas</h1>
+            <span className="user-subtitle">Dashboard de Dados e Tendências</span>
+          </div>
         </div>
         <div className="user-header-right">
           <span className="welcome-text">Welcome, {user.full_name}</span>

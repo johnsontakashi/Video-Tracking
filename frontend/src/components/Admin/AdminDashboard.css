@@ -1,7 +1,7 @@
 .admin-dashboard {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: var(--politikos-gradient-primary);
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .admin-header {
@@ -18,13 +18,29 @@
 .admin-header-left {
   display: flex;
   align-items: center;
+  gap: var(--politikos-spacing-lg);
 }
 
-.admin-header-left h1 {
+.admin-logo {
+  padding: var(--politikos-protection-area);
+}
+
+.admin-title h1 {
   margin: 0;
-  color: #1f2937;
+  color: var(--politikos-text-primary);
+  font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: 24px;
+  font-size: var(--politikos-font-size-2xl);
+  letter-spacing: -0.02em;
+}
+
+.admin-subtitle {
+  color: var(--politikos-text-secondary);
+  font-family: 'Montserrat', sans-serif;
+  font-size: var(--politikos-font-size-sm);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .admin-header-right {

@@ -1,65 +1,123 @@
+/* POLITIKOS Application Styles */
+@import './styles/politikos-brand.css';
+
 .App {
-  text-align: center;
+  min-height: 100vh;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--politikos-bg-primary);
+  color: var(--politikos-text-primary);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Override default styling with POLITIKOS brand */
+* {
+  box-sizing: border-box;
+}
+
+/* Loading Screen - POLITIKOS Branded */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--politikos-gradient-primary);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  gap: 2rem;
+  z-index: 9999;
 }
 
-.button-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin: 1rem 0;
+.loading-card {
+  background: var(--politikos-bg-primary);
+  border-radius: var(--politikos-radius-xl);
+  padding: var(--politikos-spacing-3xl);
+  box-shadow: var(--politikos-shadow-lg);
+  text-align: center;
+  border: 1px solid rgba(0, 150, 255, 0.1);
 }
 
-button {
-  background-color: #61dafb;
-  color: #282c34;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
+.loading-spinner {
+  font-size: var(--politikos-font-size-4xl);
+  margin-bottom: var(--politikos-spacing-md);
+  animation: politikos-pulse 2s ease-in-out infinite;
 }
 
-button:hover:not(:disabled) {
-  background-color: #21a1c4;
-  transform: translateY(-2px);
+@keyframes politikos-pulse {
+  0% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
-button:disabled {
-  background-color: #cccccc;
-  color: #666666;
-  cursor: not-allowed;
+.loading-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: var(--politikos-font-size-lg);
+  color: var(--politikos-blue);
+  letter-spacing: 0.5px;
 }
 
-.message {
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  border-left: 4px solid #61dafb;
-  margin: 0;
-  font-size: 1rem;
-  max-width: 500px;
+/* Override Ant Design components with POLITIKOS styling */
+.ant-card {
+  border-radius: var(--politikos-radius-lg) !important;
+  box-shadow: var(--politikos-shadow-sm) !important;
+  border: 1px solid rgba(0, 150, 255, 0.1) !important;
 }
 
-.task-id {
-  font-family: monospace;
-  background-color: rgba(97, 218, 251, 0.1);
-  padding: 0.5rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  margin: 0;
+.ant-card:hover {
+  box-shadow: var(--politikos-shadow-md) !important;
+  border-color: rgba(0, 150, 255, 0.2) !important;
+}
+
+.ant-btn-primary {
+  background: var(--politikos-gradient-data) !important;
+  border-color: transparent !important;
+  border-radius: var(--politikos-radius-md) !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.3px !important;
+}
+
+.ant-btn-primary:hover {
+  background: var(--politikos-blue) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--politikos-shadow-brand) !important;
+}
+
+.ant-input {
+  border-radius: var(--politikos-radius-md) !important;
+  border-color: rgba(0, 150, 255, 0.2) !important;
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+.ant-input:focus,
+.ant-input:hover {
+  border-color: var(--politikos-blue) !important;
+  box-shadow: 0 0 0 2px rgba(0, 150, 255, 0.1) !important;
+}
+
+/* Typography overrides */
+.ant-typography h1,
+.ant-typography h2,
+.ant-typography h3,
+.ant-typography h4,
+.ant-typography h5,
+.ant-typography h6 {
+  font-family: 'Poppins', sans-serif !important;
+  color: var(--politikos-text-primary) !important;
+}
+
+.ant-typography p,
+.ant-typography span,
+.ant-typography div {
+  font-family: 'Montserrat', sans-serif !important;
+  color: var(--politikos-text-primary) !important;
 }
