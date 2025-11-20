@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import PolitikosLogo, { PolitikosLogoText } from '../Brand/PolitikosLogo';
 import './Auth.css';
 
 interface LoginFormData {
@@ -39,14 +40,15 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onSwitchToForgotPasswor
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h2 className="auth-title">Welcome Back</h2>
-          <p className="auth-subtitle">Sign in to your account</p>
+          <PolitikosLogo size="large" withProtection={true} className="auth-logo" />
+          <h2 className="auth-title">Bem-vindo ao POLITIKOS</h2>
+          <p className="auth-subtitle">Faça login em sua conta de análise política</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="email" className="form-label">
-              Email Address
+              Endereço de Email
             </label>
             <input
               type="email"
@@ -56,14 +58,14 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onSwitchToForgotPasswor
               onChange={handleChange}
               required
               className="form-input"
-              placeholder="Enter your email"
+              placeholder="Digite seu email"
               autoComplete="email"
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="password" className="form-label">
-              Password
+              Senha
             </label>
             <div className="password-input-container">
               <input
@@ -74,7 +76,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onSwitchToForgotPasswor
                 onChange={handleChange}
                 required
                 className="form-input"
-                placeholder="Enter your password"
+                placeholder="Digite sua senha"
                 autoComplete="current-password"
               />
               <button
@@ -96,7 +98,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onSwitchToForgotPasswor
                 onChange={handleChange}
                 className="checkbox"
               />
-              <span className="checkbox-text">Remember me</span>
+              <span className="checkbox-text">Lembrar de mim</span>
             </label>
             
             <button
@@ -104,7 +106,7 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onSwitchToForgotPasswor
               onClick={onSwitchToForgotPassword}
               className="link-button"
             >
-              Forgot password?
+              Esqueceu a senha?
             </button>
           </div>
 
@@ -122,20 +124,20 @@ const Login: React.FC<LoginProps> = ({ onSwitchToSignup, onSwitchToForgotPasswor
             {loading ? (
               <span className="loading-spinner">⌛</span>
             ) : (
-              'Sign In'
+              'Entrar'
             )}
           </button>
         </form>
 
         <div className="auth-footer">
           <p className="auth-switch">
-            Don't have an account?{' '}
+            Não tem uma conta?{' '}
             <button
               type="button"
               onClick={onSwitchToSignup}
               className="link-button"
             >
-              Sign up
+              Cadastre-se
             </button>
           </p>
         </div>

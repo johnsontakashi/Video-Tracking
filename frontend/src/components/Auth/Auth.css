@@ -1,24 +1,60 @@
-/* Beautiful Authentication Styles */
+/* POLITIKOS Authentication Styles - Brand Manual Implementation */
 
 .auth-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: var(--politikos-gradient-primary);
+  padding: var(--politikos-spacing-lg);
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Brazilian Flag Pattern Background */
+.auth-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(ellipse at 25% 25%, var(--politikos-yellow) 0%, transparent 25%),
+    radial-gradient(ellipse at 75% 75%, var(--politikos-green) 0%, transparent 25%),
+    radial-gradient(ellipse at 50% 50%, var(--politikos-blue) 0%, transparent 40%);
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.auth-container > * {
+  position: relative;
+  z-index: 2;
 }
 
 .auth-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  background: var(--politikos-bg-primary);
+  backdrop-filter: blur(20px);
+  border-radius: var(--politikos-radius-xl);
+  box-shadow: var(--politikos-shadow-lg);
   width: 100%;
   max-width: 480px;
-  padding: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: var(--politikos-spacing-3xl);
+  border: 2px solid rgba(0, 0, 204, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--politikos-gradient-primary);
+  z-index: 1;
 }
 
 .auth-header {
@@ -29,12 +65,12 @@
 .auth-title {
   font-size: 2rem;
   font-weight: 700;
-  color: #1a202c;
+  color: var(--politikos-text-primary);
   margin: 0 0 8px 0;
 }
 
 .auth-subtitle {
-  color: #718096;
+  color: var(--politikos-text-secondary);
   margin: 0;
   font-size: 1rem;
 }
@@ -59,13 +95,13 @@
 
 .form-label {
   font-weight: 600;
-  color: #2d3748;
+  color: var(--politikos-text-primary);
   font-size: 0.875rem;
 }
 
 .form-input {
   padding: 12px 16px;
-  border: 2px solid #e2e8f0;
+  border: 2px solid rgba(0, 204, 108, 0.2);
   border-radius: 12px;
   font-size: 1rem;
   transition: all 0.2s ease;
@@ -74,16 +110,16 @@
 
 .form-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--politikos-blue);
+  box-shadow: 0 0 0 3px rgba(0, 0, 204, 0.1);
 }
 
 .form-input.error {
-  border-color: #e53e3e;
+  border-color: var(--politikos-danger);
 }
 
 .form-input.error:focus {
-  box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
 
 .password-input-container {
@@ -105,7 +141,7 @@
 }
 
 .password-toggle:hover {
-  background: rgba(0, 0, 0, 0.05);
+  background: rgba(0, 204, 108, 0.05);
 }
 
 .password-strength {
@@ -118,18 +154,18 @@
 }
 
 .password-strength.weak {
-  background: #fed7d7;
-  color: #c53030;
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--politikos-danger);
 }
 
 .password-strength.medium {
-  background: #feebc8;
+  background: rgba(245, 158, 11, 0.1);
   color: #dd6b20;
 }
 
 .password-strength.strong {
-  background: #c6f6d5;
-  color: #38a169;
+  background: rgba(0, 204, 108, 0.1);
+  color: var(--politikos-green);
 }
 
 .checkbox-group {
@@ -149,17 +185,17 @@
 .checkbox {
   width: 16px;
   height: 16px;
-  accent-color: #667eea;
+  accent-color: var(--politikos-blue);
 }
 
 .checkbox-text {
-  color: #4a5568;
+  color: var(--politikos-text-secondary);
 }
 
 .link-button {
   background: none;
   border: none;
-  color: #667eea;
+  color: var(--politikos-blue);
   font-weight: 600;
   cursor: pointer;
   text-decoration: underline;
@@ -168,37 +204,37 @@
 }
 
 .link-button:hover {
-  color: #5a67d8;
+  color: rgba(0, 0, 204, 0.8);
 }
 
 .field-error {
   font-size: 0.75rem;
-  color: #e53e3e;
+  color: var(--politikos-danger);
   font-weight: 500;
 }
 
 .error-message {
-  background: #fed7d7;
-  color: #c53030;
+  background: rgba(220, 38, 38, 0.1);
+  color: var(--politikos-danger);
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 500;
-  border: 1px solid #feb2b2;
+  border: 1px solid rgba(220, 38, 38, 0.3);
 }
 
 .success-message {
-  background: #c6f6d5;
-  color: #38a169;
+  background: rgba(0, 204, 108, 0.1);
+  color: var(--politikos-green);
   padding: 12px 16px;
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 500;
-  border: 1px solid #9ae6b4;
+  border: 1px solid rgba(0, 204, 108, 0.3);
 }
 
 .submit-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--politikos-gradient-primary);
   color: white;
   border: none;
   padding: 14px 24px;
@@ -216,7 +252,7 @@
 
 .submit-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 204, 0.3);
 }
 
 .submit-button:disabled {
@@ -238,12 +274,12 @@
   text-align: center;
   margin-top: 24px;
   padding-top: 24px;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid rgba(0, 204, 108, 0.2);
 }
 
 .auth-switch {
   margin: 0;
-  color: #718096;
+  color: var(--politikos-text-secondary);
   font-size: 0.875rem;
 }
 
@@ -291,6 +327,6 @@
 
 .loading-text {
   margin-top: 16px;
-  color: #4a5568;
+  color: var(--politikos-text-secondary);
   font-weight: 500;
 }

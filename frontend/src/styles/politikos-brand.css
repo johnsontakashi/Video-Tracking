@@ -1,0 +1,299 @@
+/* POLITIKOS Brand Identity System */
+/* Exact implementation according to brand manual */
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap');
+
+/* POLITIKOS Color System - Exact from Brand Manual */
+:root {
+  /* Primary Brand Colors */
+  --politikos-green: #00cc6c;
+  --politikos-green-alt: #25725d; /* From CMYK: C82 M31 Y66 K20 - RGB: R37 G114 B93 */
+  --politikos-yellow: #ffd93d;
+  --politikos-yellow-rgb: rgb(211, 183, 66); /* From CMYK values */
+  --politikos-blue: #0000cc;
+  --politikos-blue-alt: #0096ff;
+  
+  /* Typography Colors */
+  --politikos-text-primary: #1a1a1a;
+  --politikos-text-secondary: #4a4a4a;
+  --politikos-text-light: #757575;
+  --politikos-text-white: #ffffff;
+  
+  /* Background Colors */
+  --politikos-bg-primary: #ffffff;
+  --politikos-bg-secondary: #f8f9fa;
+  --politikos-bg-dark: #1a1a1a;
+  
+  /* Gradients - Brazilian Flag Inspired */
+  --politikos-gradient-primary: linear-gradient(135deg, var(--politikos-blue) 0%, var(--politikos-green) 50%, var(--politikos-yellow) 100%);
+  --politikos-gradient-data: linear-gradient(135deg, var(--politikos-blue-alt) 0%, var(--politikos-blue) 100%);
+  --politikos-gradient-success: linear-gradient(135deg, var(--politikos-green) 0%, var(--politikos-green-alt) 100%);
+  
+  /* Shadows */
+  --politikos-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --politikos-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --politikos-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --politikos-shadow-brand: 0 4px 16px rgba(0, 150, 255, 0.2);
+  
+  /* Typography Scale */
+  --politikos-font-size-xs: 0.75rem;   /* 12px */
+  --politikos-font-size-sm: 0.875rem;  /* 14px */
+  --politikos-font-size-base: 1rem;    /* 16px */
+  --politikos-font-size-lg: 1.125rem;  /* 18px */
+  --politikos-font-size-xl: 1.25rem;   /* 20px */
+  --politikos-font-size-2xl: 1.5rem;   /* 24px */
+  --politikos-font-size-3xl: 1.875rem; /* 30px */
+  --politikos-font-size-4xl: 2.25rem;  /* 36px */
+  --politikos-font-size-5xl: 3rem;     /* 48px */
+  
+  /* Spacing System */
+  --politikos-spacing-xs: 0.25rem;  /* 4px */
+  --politikos-spacing-sm: 0.5rem;   /* 8px */
+  --politikos-spacing-md: 1rem;     /* 16px */
+  --politikos-spacing-lg: 1.5rem;   /* 24px */
+  --politikos-spacing-xl: 2rem;     /* 32px */
+  --politikos-spacing-2xl: 3rem;    /* 48px */
+  --politikos-spacing-3xl: 4rem;    /* 64px */
+  
+  /* Border Radius */
+  --politikos-radius-sm: 4px;
+  --politikos-radius-md: 8px;
+  --politikos-radius-lg: 12px;
+  --politikos-radius-xl: 16px;
+  --politikos-radius-full: 50%;
+  
+  /* Logo Protection Area - "L" measurement */
+  --politikos-protection-area: 24px;
+}
+
+/* Typography System - Exact from Brand Manual */
+.politikos-font-primary {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 300; /* Light */
+}
+
+.politikos-font-primary-medium {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 500; /* Medium */
+}
+
+.politikos-font-primary-bold {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 700; /* Bold */
+}
+
+.politikos-font-secondary {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400; /* Regular */
+}
+
+/* Global Typography Reset */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--politikos-text-primary);
+  background-color: var(--politikos-bg-primary);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings - Use Poppins for titles and signage */
+h1, h2, h3, h4, h5, h6,
+.politikos-heading {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 var(--politikos-spacing-md) 0;
+  color: var(--politikos-text-primary);
+}
+
+h1 { font-size: var(--politikos-font-size-4xl); font-weight: 700; }
+h2 { font-size: var(--politikos-font-size-3xl); font-weight: 600; }
+h3 { font-size: var(--politikos-font-size-2xl); font-weight: 600; }
+h4 { font-size: var(--politikos-font-size-xl); font-weight: 500; }
+h5 { font-size: var(--politikos-font-size-lg); font-weight: 500; }
+h6 { font-size: var(--politikos-font-size-base); font-weight: 500; }
+
+/* Body Text - Use Montserrat for content */
+p, .politikos-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  margin: 0 0 var(--politikos-spacing-md) 0;
+}
+
+/* Brand Color Classes */
+.politikos-color-primary { color: var(--politikos-blue); }
+.politikos-color-green { color: var(--politikos-green); }
+.politikos-color-yellow { color: var(--politikos-yellow); }
+.politikos-bg-primary { background-color: var(--politikos-blue); }
+.politikos-bg-green { background-color: var(--politikos-green); }
+.politikos-bg-yellow { background-color: var(--politikos-yellow); }
+.politikos-bg-gradient { background: var(--politikos-gradient-primary); }
+
+/* Brazilian Flag Color Scheme for KOS letters */
+.politikos-k { color: var(--politikos-yellow); }
+.politikos-o { color: var(--politikos-blue); }
+.politikos-s { color: var(--politikos-green); }
+
+/* Button System */
+.politikos-btn {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: var(--politikos-font-size-sm);
+  letter-spacing: 0.5px;
+  padding: var(--politikos-spacing-sm) var(--politikos-spacing-lg);
+  border-radius: var(--politikos-radius-md);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--politikos-spacing-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.politikos-btn-primary {
+  background: var(--politikos-gradient-data);
+  color: var(--politikos-text-white);
+  box-shadow: var(--politikos-shadow-brand);
+}
+
+.politikos-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 150, 255, 0.3);
+}
+
+.politikos-btn-secondary {
+  background: var(--politikos-bg-primary);
+  color: var(--politikos-blue);
+  border: 2px solid var(--politikos-blue);
+}
+
+.politikos-btn-secondary:hover {
+  background: var(--politikos-blue);
+  color: var(--politikos-text-white);
+}
+
+.politikos-btn-success {
+  background: var(--politikos-gradient-success);
+  color: var(--politikos-text-white);
+}
+
+/* Card System */
+.politikos-card {
+  background: var(--politikos-bg-primary);
+  border-radius: var(--politikos-radius-lg);
+  box-shadow: var(--politikos-shadow-md);
+  padding: var(--politikos-spacing-xl);
+  margin-bottom: var(--politikos-spacing-lg);
+  border: 1px solid rgba(0, 150, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.politikos-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--politikos-shadow-lg);
+  border-color: rgba(0, 150, 255, 0.2);
+}
+
+/* Data Visualization Colors */
+.politikos-chart-primary { background: var(--politikos-blue); }
+.politikos-chart-secondary { background: var(--politikos-green); }
+.politikos-chart-accent { background: var(--politikos-yellow); }
+
+/* Utility Classes */
+.politikos-text-center { text-align: center; }
+.politikos-text-left { text-align: left; }
+.politikos-text-right { text-align: right; }
+
+.politikos-mb-0 { margin-bottom: 0; }
+.politikos-mb-1 { margin-bottom: var(--politikos-spacing-xs); }
+.politikos-mb-2 { margin-bottom: var(--politikos-spacing-sm); }
+.politikos-mb-3 { margin-bottom: var(--politikos-spacing-md); }
+.politikos-mb-4 { margin-bottom: var(--politikos-spacing-lg); }
+.politikos-mb-5 { margin-bottom: var(--politikos-spacing-xl); }
+
+.politikos-mt-0 { margin-top: 0; }
+.politikos-mt-1 { margin-top: var(--politikos-spacing-xs); }
+.politikos-mt-2 { margin-top: var(--politikos-spacing-sm); }
+.politikos-mt-3 { margin-top: var(--politikos-spacing-md); }
+.politikos-mt-4 { margin-top: var(--politikos-spacing-lg); }
+.politikos-mt-5 { margin-top: var(--politikos-spacing-xl); }
+
+/* Protection Area Implementation */
+.politikos-logo-container {
+  padding: var(--politikos-protection-area);
+  display: inline-block;
+}
+
+/* Contrast Rules */
+.politikos-high-contrast {
+  color: var(--politikos-text-primary);
+  background: var(--politikos-bg-primary);
+}
+
+.politikos-dark-theme {
+  color: var(--politikos-text-white);
+  background: var(--politikos-bg-dark);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  h1 { font-size: var(--politikos-font-size-3xl); }
+  h2 { font-size: var(--politikos-font-size-2xl); }
+  h3 { font-size: var(--politikos-font-size-xl); }
+  
+  .politikos-card {
+    padding: var(--politikos-spacing-lg);
+  }
+}
+
+/* Animation for Brazilian Flag Elements */
+@keyframes politikos-flag-wave {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-2px); }
+  100% { transform: translateY(0px); }
+}
+
+.politikos-flag-animation {
+  animation: politikos-flag-wave 2s ease-in-out infinite;
+}
+
+/* Data Analytics Theme */
+.politikos-analytics-theme {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.politikos-data-card {
+  background: var(--politikos-bg-primary);
+  border-left: 4px solid var(--politikos-blue);
+  box-shadow: var(--politikos-shadow-sm);
+}
+
+/* Trust and Strategy Visual Elements */
+.politikos-trust-indicator {
+  border: 2px solid var(--politikos-green);
+  background: rgba(0, 204, 108, 0.05);
+}
+
+.politikos-strategy-indicator {
+  border: 2px solid var(--politikos-blue);
+  background: rgba(0, 150, 255, 0.05);
+}
+
+.politikos-innovation-indicator {
+  border: 2px solid var(--politikos-yellow);
+  background: rgba(255, 217, 61, 0.05);
+}

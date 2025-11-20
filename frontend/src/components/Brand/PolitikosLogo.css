@@ -1,0 +1,358 @@
+/* POLITIKOS Logo System - Exact Brand Manual Implementation */
+
+.politikos-logo {
+  display: inline-block;
+  position: relative;
+}
+
+/* Protection Area - "L" measurement */
+.politikos-logo--protected {
+  padding: var(--politikos-protection-area);
+}
+
+.politikos-logo__container {
+  display: flex;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  user-select: none;
+}
+
+/* POLITI - Analytical Data Section */
+.politikos-logo__politi {
+  display: flex;
+  align-items: center;
+}
+
+/* KOS - Brazilian Flag Section */
+.politikos-logo__kos {
+  display: flex;
+  align-items: center;
+  margin-left: 2px;
+}
+
+/* Letter Styling */
+.politikos-logo__letter {
+  display: inline-block;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+/* Size Variants */
+.politikos-logo--small .politikos-logo__letter {
+  font-size: 16px;
+}
+
+.politikos-logo--medium .politikos-logo__letter {
+  font-size: 24px;
+}
+
+.politikos-logo--large .politikos-logo__letter {
+  font-size: 32px;
+}
+
+.politikos-logo--xlarge .politikos-logo__letter {
+  font-size: 48px;
+}
+
+/* POLITI Letters - Blue tones for analytical precision */
+.politikos-logo--positive .politikos-logo__politi .politikos-logo__letter {
+  color: var(--politikos-blue);
+  text-shadow: 0 1px 2px rgba(0, 0, 204, 0.1);
+}
+
+/* KOS Letters - Brazilian Flag Colors */
+
+/* K - Yellow (Diamond reference) */
+.politikos-logo--positive .politikos-logo__letter--k {
+  color: var(--politikos-yellow);
+  text-shadow: 0 1px 2px rgba(255, 217, 61, 0.3);
+  position: relative;
+}
+
+.politikos-logo__letter--k::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  background: var(--politikos-yellow);
+  transform: translate(-50%, -50%) rotate(45deg);
+  opacity: 0.2;
+  z-index: -1;
+  border-radius: 1px;
+}
+
+/* O - Blue (Central circle reference) */
+.politikos-logo--positive .politikos-logo__letter--o-flag {
+  color: var(--politikos-blue);
+  background: radial-gradient(circle at center, rgba(0, 0, 204, 0.1) 30%, transparent 30%);
+  border-radius: 50%;
+  position: relative;
+}
+
+.politikos-logo__letter--o-flag::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  background: var(--politikos-blue);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0.3;
+  z-index: -1;
+}
+
+/* S - Green (Growth and hope reference) */
+.politikos-logo--positive .politikos-logo__letter--s {
+  color: var(--politikos-green);
+  text-shadow: 0 1px 2px rgba(0, 204, 108, 0.3);
+  position: relative;
+}
+
+.politikos-logo__letter--s::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--politikos-green), transparent);
+  opacity: 0.4;
+}
+
+/* Negative Version - For dark backgrounds */
+.politikos-logo--negative .politikos-logo__politi .politikos-logo__letter {
+  color: var(--politikos-blue-alt);
+  text-shadow: 0 1px 3px rgba(0, 150, 255, 0.3);
+}
+
+.politikos-logo--negative .politikos-logo__letter--k {
+  color: var(--politikos-yellow);
+  text-shadow: 0 1px 3px rgba(255, 217, 61, 0.4);
+}
+
+.politikos-logo--negative .politikos-logo__letter--o-flag {
+  color: var(--politikos-blue-alt);
+}
+
+.politikos-logo--negative .politikos-logo__letter--s {
+  color: var(--politikos-green);
+  text-shadow: 0 1px 3px rgba(0, 204, 108, 0.4);
+}
+
+/* Monochrome Version */
+.politikos-logo--monochrome .politikos-logo__letter {
+  color: currentColor;
+  text-shadow: none;
+}
+
+.politikos-logo--monochrome .politikos-logo__letter::after,
+.politikos-logo--monochrome .politikos-logo__letter::before {
+  display: none;
+}
+
+/* Tagline */
+.politikos-logo__tagline {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.politikos-tagline__text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 0.7em;
+  color: var(--politikos-text-secondary);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Text Logo Variant */
+.politikos-logo-text {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
+  user-select: none;
+}
+
+.politikos-logo-text--small { font-size: 16px; }
+.politikos-logo-text--medium { font-size: 20px; }
+.politikos-logo-text--large { font-size: 28px; }
+
+.politikos-text__politi {
+  color: var(--politikos-blue);
+  margin-right: 1px;
+}
+
+.politikos-text__k { color: var(--politikos-yellow); }
+.politikos-text__o { color: var(--politikos-blue); }
+.politikos-text__s { color: var(--politikos-green); }
+
+/* Negative Text Version */
+.politikos-logo-text--negative .politikos-text__politi {
+  color: var(--politikos-blue-alt);
+}
+
+.politikos-logo-text--negative .politikos-text__o {
+  color: var(--politikos-blue-alt);
+}
+
+/* Monochrome Text Version */
+.politikos-logo-text--monochrome .politikos-text__politi,
+.politikos-logo-text--monochrome .politikos-text__k,
+.politikos-logo-text--monochrome .politikos-text__o,
+.politikos-logo-text--monochrome .politikos-text__s {
+  color: currentColor;
+}
+
+/* Icon Variant */
+.politikos-icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.politikos-icon__circle {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.politikos-icon__circle--blue {
+  background: var(--politikos-blue);
+  opacity: 0.8;
+}
+
+.politikos-icon__diamond {
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.politikos-icon__diamond--yellow {
+  background: var(--politikos-yellow);
+  opacity: 0.9;
+}
+
+.politikos-icon__wave {
+  position: absolute;
+  bottom: 15%;
+  left: 20%;
+  right: 20%;
+  height: 4px;
+  border-radius: 2px;
+}
+
+.politikos-icon__wave--green {
+  background: var(--politikos-green);
+  opacity: 0.8;
+}
+
+/* Interactive Effects */
+.politikos-logo:hover .politikos-logo__letter--k {
+  transform: scale(1.05);
+  text-shadow: 0 2px 4px rgba(255, 217, 61, 0.4);
+}
+
+.politikos-logo:hover .politikos-logo__letter--o-flag {
+  transform: scale(1.05);
+}
+
+.politikos-logo:hover .politikos-logo__letter--s {
+  transform: scale(1.05);
+  text-shadow: 0 2px 4px rgba(0, 204, 108, 0.4);
+}
+
+/* Accessibility */
+.politikos-logo:focus,
+.politikos-logo-text:focus {
+  outline: 2px solid var(--politikos-blue);
+  outline-offset: 4px;
+  border-radius: var(--politikos-radius-sm);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .politikos-logo__letter {
+    text-shadow: none;
+  }
+  
+  .politikos-logo--positive .politikos-logo__letter--k {
+    color: #cc9900;
+  }
+  
+  .politikos-logo--positive .politikos-logo__letter--o-flag {
+    color: #0066cc;
+  }
+  
+  .politikos-logo--positive .politikos-logo__letter--s {
+    color: #009955;
+  }
+}
+
+/* Print styles */
+@media print {
+  .politikos-logo,
+  .politikos-logo-text {
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  
+  .politikos-logo__letter::after,
+  .politikos-logo__letter::before {
+    display: none;
+  }
+}
+
+/* Animation for special occasions */
+@keyframes politikos-pride {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.02); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.politikos-logo--animated .politikos-logo__kos {
+  animation: politikos-pride 3s ease-in-out infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .politikos-logo--large .politikos-logo__letter {
+    font-size: 28px;
+  }
+  
+  .politikos-logo--xlarge .politikos-logo__letter {
+    font-size: 36px;
+  }
+  
+  .politikos-tagline__text {
+    font-size: 0.6em;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .politikos-logo:not(.politikos-logo--positive):not(.politikos-logo--negative):not(.politikos-logo--monochrome) {
+    /* Auto dark mode - use negative variant colors */
+  }
+  
+  .politikos-logo:not(.politikos-logo--positive):not(.politikos-logo--negative):not(.politikos-logo--monochrome) .politikos-logo__politi .politikos-logo__letter {
+    color: var(--politikos-blue-alt);
+  }
+}

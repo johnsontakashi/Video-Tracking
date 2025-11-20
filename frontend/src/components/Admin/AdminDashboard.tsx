@@ -12,6 +12,7 @@ import {
   LogoutOutlined,
   DashboardOutlined
 } from '@ant-design/icons';
+import PolitikosLogo, { PolitikosLogoText } from '../Brand/PolitikosLogo';
 import './AdminDashboard.css';
 
 const { TabPane } = Tabs;
@@ -160,8 +161,11 @@ const AdminDashboard: React.FC = () => {
     <div className="admin-dashboard">
       <header className="admin-header">
         <div className="admin-header-left">
-          <DashboardOutlined style={{ fontSize: '24px', marginRight: '12px' }} />
-          <h1>Admin Dashboard</h1>
+          <PolitikosLogoText size="large" className="admin-logo" />
+          <div className="admin-title">
+            <h1>Painel Administrativo</h1>
+            <span className="admin-subtitle">Gestão de Dados Políticos</span>
+          </div>
         </div>
         <div className="admin-header-right">
           <span className="welcome-text">Welcome, {user.full_name}</span>
