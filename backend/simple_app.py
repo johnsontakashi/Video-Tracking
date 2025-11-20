@@ -171,6 +171,44 @@ def logout():
         'message': 'Logged out successfully'
     })
 
+@app.route('/api/auth/request-password-reset', methods=['POST'])
+def request_password_reset():
+    try:
+        data = request.get_json()
+        
+        if not data or not data.get('email'):
+            return jsonify({
+                'success': False,
+                'error': 'validation_error',
+                'message': 'Email is required'
+            }), 400
+        
+        # Check if email exists (for demo purposes)
+        user_exists = False
+        for user in users:
+            if user['email'].lower() == data['email'].lower():
+                user_exists = True
+                break
+        
+        # Always return success for security (don't reveal if email exists)
+        # In a real app, you would send an email if the user exists
+        if user_exists:
+            print(f"📧 Password reset requested for: {data['email']}")
+            print(f"🔗 Reset link would be sent to user's email")
+        
+        return jsonify({
+            'success': True,
+            'message': 'If the email exists, password reset instructions have been sent'
+        }), 200
+        
+    except Exception as e:
+        print(f"Password reset error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'internal_error',
+            'message': 'Password reset request failed'
+        }), 500
+
 if __name__ == '__main__':
     print("🚀 Starting simple Flask server...")
     print("📧 Sample users:")
