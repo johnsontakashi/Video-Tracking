@@ -5,6 +5,10 @@ import AuthPage from './components/Auth/AuthPage';
 import ResetPassword from './components/Auth/ResetPassword';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import UserDashboard from './components/User/UserDashboard';
+import InfluencerList from './components/Influencers/InfluencerList';
+import AnalyticsDashboard from './components/Analytics/AnalyticsDashboard';
+import SubscriptionPlans from './components/Subscription/SubscriptionPlans';
+import UserManagement from './components/Users/UserManagement';
 import './App.css';
 
 // Loading component
@@ -136,6 +140,38 @@ function App() {
                 <ProtectedRoute>
                   <UserDashboard />
                 </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/influencers" 
+              element={
+                <ProtectedRoute>
+                  <InfluencerList />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/analytics" 
+              element={
+                <ProtectedRoute>
+                  <AnalyticsDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/subscription" 
+              element={
+                <ProtectedRoute>
+                  <SubscriptionPlans />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/users" 
+              element={
+                <AdminRoute>
+                  <UserManagement />
+                </AdminRoute>
               } 
             />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />

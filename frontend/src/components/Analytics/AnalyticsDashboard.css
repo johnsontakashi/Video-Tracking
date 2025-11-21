@@ -1,0 +1,320 @@
+.analytics-dashboard {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #f8fafc;
+  min-height: calc(100vh - 64px);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 0 4px;
+}
+
+.dashboard-header h2 {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.metrics-row {
+  margin-bottom: 24px;
+}
+
+.metric-card {
+  border-radius: 12px;
+  border: 1px solid #e6f7ff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.metric-card .ant-statistic {
+  text-align: center;
+}
+
+.metric-card .ant-statistic-title {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.metric-card .ant-statistic-content {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.charts-row {
+  margin-bottom: 24px;
+}
+
+.chart-card {
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  height: 100%;
+}
+
+.chart-card .ant-card-head {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 16px 20px;
+}
+
+.chart-card .ant-card-head-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.chart-card .ant-card-body {
+  padding: 20px;
+}
+
+.influencers-table-card {
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.influencers-table-card .ant-card-head {
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.influencers-table-card .ant-card-head-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Custom table styling */
+.influencers-table-card .ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #e2e8f0;
+  padding: 16px;
+}
+
+.influencers-table-card .ant-table-tbody > tr > td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.influencers-table-card .ant-table-tbody > tr:hover > td {
+  background: #f8fafc;
+}
+
+/* Progress bar customization */
+.ant-progress-line {
+  margin-bottom: 0;
+}
+
+.ant-progress-bg {
+  border-radius: 4px;
+}
+
+/* Tag styling */
+.ant-tag {
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 4px;
+}
+
+/* Button styling */
+.ant-btn {
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.ant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ant-btn-primary {
+  background: linear-gradient(135deg, #00cc6c 0%, #009c52 100%);
+  border: none;
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(135deg, #009c52 0%, #00cc6c 100%);
+}
+
+/* Select styling */
+.ant-select-selector {
+  border-radius: 6px !important;
+}
+
+.ant-select-focused .ant-select-selector {
+  border-color: #00cc6c !important;
+  box-shadow: 0 0 0 2px rgba(0, 204, 108, 0.1) !important;
+}
+
+/* Chart styling improvements */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #e2e8f0;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.recharts-default-tooltip {
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.recharts-legend-wrapper {
+  margin-top: 16px;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+  .analytics-dashboard {
+    padding: 16px;
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .dashboard-header h2 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-dashboard {
+    padding: 12px;
+  }
+  
+  .dashboard-header h2 {
+    font-size: 20px;
+  }
+  
+  .metric-card .ant-statistic-content {
+    font-size: 20px;
+  }
+  
+  .chart-card {
+    margin-bottom: 16px;
+  }
+  
+  .chart-card .ant-card-body {
+    padding: 16px;
+  }
+  
+  .influencers-table-card .ant-table-tbody > tr > td,
+  .influencers-table-card .ant-table-thead > tr > th {
+    padding: 12px 8px;
+  }
+}
+
+/* Animation improvements */
+.metric-card,
+.chart-card,
+.influencers-table-card {
+  animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar for tables */
+.ant-table-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.ant-table-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.ant-table-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.ant-table-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Smooth scrolling */
+.analytics-dashboard {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced card hover effects */
+.chart-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+  transition: all 0.3s ease;
+}
+
+/* Loading spinner customization */
+.ant-spin-lg .ant-spin-dot {
+  font-size: 32px;
+}
+
+.ant-spin-lg .ant-spin-dot i {
+  background-color: #00cc6c;
+}
+
+/* Enhanced tooltip styling */
+.recharts-tooltip-cursor {
+  fill: rgba(0, 204, 108, 0.1);
+}
+
+/* Platform color customization */
+.platform-instagram {
+  color: #E4405F !important;
+}
+
+.platform-youtube {
+  color: #FF0000 !important;
+}
+
+.platform-twitter {
+  color: #1DA1F2 !important;
+}
+
+.platform-tiktok {
+  color: #000000 !important;
+}
