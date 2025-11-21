@@ -36,7 +36,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import './UserManagement.css';
 
 const { Option } = Select;
-const { Search } = Input;
 
 interface User {
   id: number;
@@ -103,28 +102,106 @@ const UserManagement: React.FC = () => {
     fetchUsers();
   }, []);
 
+  const getMockUsers = (): User[] => [
+    {
+      id: 1,
+      email: 'admin@videotracking.com',
+      first_name: 'Admin',
+      last_name: 'User',
+      full_name: 'Admin User',
+      username: 'admin',
+      role: 'admin',
+      is_active: true,
+      email_verified: true,
+      current_plan: 'enterprise',
+      created_at: '2024-01-15T10:30:00Z',
+      last_login: '2024-01-21T14:30:00Z'
+    },
+    {
+      id: 2,
+      email: 'analyst@company.com',
+      first_name: 'Data',
+      last_name: 'Analyst',
+      full_name: 'Data Analyst',
+      username: 'analyst',
+      role: 'analyst',
+      is_active: true,
+      email_verified: true,
+      current_plan: 'professional',
+      created_at: '2024-01-18T09:15:00Z',
+      last_login: '2024-01-21T13:45:00Z'
+    },
+    {
+      id: 3,
+      email: 'guest@example.com',
+      first_name: 'Guest',
+      last_name: 'User',
+      full_name: 'Guest User',
+      username: 'guest',
+      role: 'guest',
+      is_active: true,
+      email_verified: false,
+      current_plan: 'starter',
+      created_at: '2024-01-20T16:20:00Z',
+      last_login: '2024-01-21T12:10:00Z'
+    },
+    {
+      id: 4,
+      email: 'inactive@example.com',
+      first_name: 'Inactive',
+      last_name: 'User',
+      full_name: 'Inactive User',
+      role: 'guest',
+      is_active: false,
+      email_verified: true,
+      current_plan: 'free',
+      created_at: '2024-01-10T11:00:00Z'
+    }
+  ];
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('access_token');
       
-      const response = await fetch('/api/users', {
+      // Check if we should use mock data
+      const useMockData = process.env.REACT_APP_USE_MOCK_DATA === 'true' || 
+                         process.env.NODE_ENV === 'development';
+      
+      if (useMockData) {
+        console.log('Using mock users data');
+        // Simulate loading time
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setUsers(getMockUsers());
+        return;
+      }
+      
+      // Try to fetch from backend
+      const token = localStorage.getItem('access_token');
+      const response = await fetch(`${process.env.REACT_APP_API_URL || ''}/api/users`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
       
-      if (data.success) {
-        setUsers(data.users);
+      if (data.users) {
+        setUsers(data.users.map((user: any) => ({
+          ...user,
+          full_name: user.full_name || `${user.first_name} ${user.last_name}`
+        })));
       } else {
-        message.error('Failed to load users');
+        console.warn('No users data in response, using mock data');
+        setUsers(getMockUsers());
       }
     } catch (error) {
-      console.error('Error fetching users:', error);
-      message.error('Failed to load users');
+      console.warn('Failed to fetch users from backend, using mock data:', error);
+      setUsers(getMockUsers());
     } finally {
       setLoading(false);
     }
@@ -207,43 +284,40 @@ const UserManagement: React.FC = () => {
     }
   };
 
-  const getActionMenu = (user: User) => (
-    <Menu>
-      <Menu.Item 
-        key="edit" 
-        icon={<EditOutlined />}
-        onClick={() => handleEditUser(user)}
-      >
-        Edit User
-      </Menu.Item>
-      <Menu.Item 
-        key="toggle" 
-        icon={<UserSwitchOutlined />}
-        onClick={() => handleToggleStatus(user.id, user.is_active)}
-      >
-        {user.is_active ? 'Deactivate' : 'Activate'} User
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item 
-        key="delete" 
-        icon={<DeleteOutlined />}
-        danger
-        onClick={() => {
-          Modal.confirm({
-            title: 'Delete User',
-            content: `Are you sure you want to delete ${user.full_name}?`,
-            okText: 'Delete',
-            okType: 'danger',
-            onOk: () => {
-              message.info('Delete functionality coming soon');
-            }
-          });
-        }}
-      >
-        Delete User
-      </Menu.Item>
-    </Menu>
-  );
+  const getActionMenuItems = (user: User) => [
+    {
+      key: 'edit',
+      icon: <EditOutlined />,
+      label: 'Edit User',
+      onClick: () => handleEditUser(user)
+    },
+    {
+      key: 'toggle',
+      icon: <UserSwitchOutlined />,
+      label: `${user.is_active ? 'Deactivate' : 'Activate'} User`,
+      onClick: () => handleToggleStatus(user.id, user.is_active)
+    },
+    {
+      type: 'divider' as const
+    },
+    {
+      key: 'delete',
+      icon: <DeleteOutlined />,
+      label: 'Delete User',
+      danger: true,
+      onClick: () => {
+        Modal.confirm({
+          title: 'Delete User',
+          content: `Are you sure you want to delete ${user.full_name}?`,
+          okText: 'Delete',
+          okType: 'danger',
+          onOk: () => {
+            message.info('Delete functionality coming soon');
+          }
+        });
+      }
+    }
+  ];
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = !searchText || 
@@ -390,7 +464,7 @@ const UserManagement: React.FC = () => {
             disabled={record.id === currentUser?.id}
           />
           <Dropdown 
-            overlay={getActionMenu(record)}
+            menu={{ items: getActionMenuItems(record) }}
             trigger={['click']}
             placement="bottomRight"
           >
@@ -426,7 +500,7 @@ const UserManagement: React.FC = () => {
       >
         <div className="filters-section">
           <Space size="middle" wrap>
-            <Search
+            <Input
               placeholder="Search users..."
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}

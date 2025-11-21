@@ -122,31 +122,29 @@ const SubscriptionPlans: React.FC = () => {
   const fetchPlans = async () => {
     try {
       setLoading(true);
-      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-      const response = await fetch(`${apiUrl}/api/payment/plans`, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
       
-      if (data.plans) {
+      // Check if we should use mock data (configurable via env)
+      const useMockData = process.env.REACT_APP_USE_MOCK_DATA === 'true' || 
+                         process.env.NODE_ENV === 'development';
+      
+      if (useMockData) {
+        console.log('Using mock subscription plans');
+        setPlans(getMockPlans());
+        return;
+      }
+      
+      // Try to fetch from backend
+      const data = await paymentService.getPlans();
+      
+      if (data.plans && Array.isArray(data.plans)) {
         setPlans(data.plans);
       } else {
-        // If backend doesn't have plans service, use mock data
         setPlans(getMockPlans());
-        console.log('Using mock subscription plans data');
+        console.log('Backend returned no plans, using mock data');
       }
-    } catch (error) {
-      console.error('Error fetching plans:', error);
-      // Use mock data as fallback
+    } catch (error: any) {
+      console.warn('Failed to fetch plans from backend, using mock data');
       setPlans(getMockPlans());
-      console.log('Backend unavailable, using mock subscription plans data');
     } finally {
       setLoading(false);
     }
@@ -254,7 +252,7 @@ const SubscriptionPlans: React.FC = () => {
               className={`plan-card ${isCurrentPlan(plan.plan_type) ? 'current-plan' : ''} ${
                 isRecommended(plan.plan_type) ? 'recommended' : ''
               }`}
-              bodyStyle={{ padding: '32px 24px' }}
+              styles={{ body: { padding: '32px 24px' } }}
             >
               {isRecommended(plan.plan_type) && (
                 <div className="recommended-badge">

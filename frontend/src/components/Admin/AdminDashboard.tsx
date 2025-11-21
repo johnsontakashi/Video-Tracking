@@ -15,7 +15,7 @@ import {
 import PolitikosLogo, { PolitikosLogoText } from '../Brand/PolitikosLogo';
 import './AdminDashboard.css';
 
-const { TabPane } = Tabs;
+// const { TabPane } = Tabs; // Deprecated - using items API instead
 const { Option } = Select;
 
 // Mock data for demonstration
@@ -235,108 +235,117 @@ const AdminDashboard: React.FC = () => {
 
         {/* Management Tabs */}
         <Card className="management-tabs">
-          <Tabs defaultActiveKey="users" size="large">
-            <TabPane 
-              tab={
-                <span>
-                  <UserOutlined />
-                  User Management
-                </span>
-              } 
-              key="users"
-            >
-              <div className="tab-header">
-                <h3>Manage Users</h3>
-                <Button 
-                  type="primary" 
-                  icon={<PlusOutlined />}
-                  onClick={handleAddUser}
-                >
-                  Add New User
-                </Button>
-              </div>
-              <Table 
-                columns={userColumns} 
-                dataSource={mockUsers} 
-                rowKey="id"
-                pagination={{ pageSize: 10 }}
-              />
-            </TabPane>
-
-            <TabPane 
-              tab={
-                <span>
-                  <BarChartOutlined />
-                  Influencer Management
-                </span>
-              } 
-              key="influencers"
-            >
-              <div className="tab-header">
-                <h3>Manage Influencers</h3>
-                <Button 
-                  type="primary" 
-                  icon={<PlusOutlined />}
-                  onClick={handleAddInfluencer}
-                >
-                  Add New Influencer
-                </Button>
-              </div>
-              <Table 
-                columns={influencerColumns} 
-                dataSource={mockInfluencers} 
-                rowKey="id"
-                pagination={{ pageSize: 10 }}
-              />
-            </TabPane>
-
-            <TabPane 
-              tab={
-                <span>
-                  <SettingOutlined />
-                  System Settings
-                </span>
-              } 
-              key="settings"
-            >
-              <div className="settings-content">
-                <h3>System Configuration</h3>
-                <Row gutter={[16, 16]}>
-                  <Col span={12}>
-                    <Card title="Data Collection Settings" size="small">
-                      <p>Configure automatic data collection intervals and sources.</p>
-                      <Button>Configure Collection</Button>
-                    </Card>
-                  </Col>
-                  <Col span={12}>
-                    <Card title="API Rate Limits" size="small">
-                      <p>Manage API rate limits and proxy configurations.</p>
-                      <Button>Manage Limits</Button>
-                    </Card>
-                  </Col>
-                  <Col span={12}>
-                    <Card title="Notification Settings" size="small">
-                      <p>Configure email notifications and alerts.</p>
-                      <Button>Setup Notifications</Button>
-                    </Card>
-                  </Col>
-                  <Col span={12}>
-                    <Card title="Database Maintenance" size="small">
-                      <p>Database backup, optimization, and cleanup tools.</p>
-                      <Button>Database Tools</Button>
-                    </Card>
-                  </Col>
-                </Row>
-              </div>
-            </TabPane>
-          </Tabs>
+          <Tabs 
+            defaultActiveKey="users" 
+            size="large"
+            items={[
+              {
+                key: 'users',
+                label: (
+                  <span>
+                    <UserOutlined />
+                    User Management
+                  </span>
+                ),
+                children: (
+                  <>
+                    <div className="tab-header">
+                      <h3>Manage Users</h3>
+                      <Button 
+                        type="primary" 
+                        icon={<PlusOutlined />}
+                        onClick={handleAddUser}
+                      >
+                        Add New User
+                      </Button>
+                    </div>
+                    <Table 
+                      columns={userColumns} 
+                      dataSource={mockUsers} 
+                      rowKey="id"
+                      pagination={{ pageSize: 10 }}
+                    />
+                  </>
+                )
+              },
+              {
+                key: 'influencers',
+                label: (
+                  <span>
+                    <BarChartOutlined />
+                    Influencer Management
+                  </span>
+                ),
+                children: (
+                  <>
+                    <div className="tab-header">
+                      <h3>Manage Influencers</h3>
+                      <Button 
+                        type="primary" 
+                        icon={<PlusOutlined />}
+                        onClick={handleAddInfluencer}
+                      >
+                        Add New Influencer
+                      </Button>
+                    </div>
+                    <Table 
+                      columns={influencerColumns} 
+                      dataSource={mockInfluencers} 
+                      rowKey="id"
+                      pagination={{ pageSize: 10 }}
+                    />
+                  </>
+                )
+              },
+              {
+                key: 'settings',
+                label: (
+                  <span>
+                    <SettingOutlined />
+                    System Settings
+                  </span>
+                ),
+                children: (
+                  <div className="settings-content">
+                    <h3>System Configuration</h3>
+                    <Row gutter={[16, 16]}>
+                      <Col span={12}>
+                        <Card title="Data Collection Settings" size="small">
+                          <p>Configure automatic data collection intervals and sources.</p>
+                          <Button>Configure Collection</Button>
+                        </Card>
+                      </Col>
+                      <Col span={12}>
+                        <Card title="API Rate Limits" size="small">
+                          <p>Manage API rate limits and proxy configurations.</p>
+                          <Button>Manage Limits</Button>
+                        </Card>
+                      </Col>
+                      <Col span={12}>
+                        <Card title="Notification Settings" size="small">
+                          <p>Configure email notifications and alerts.</p>
+                          <Button>Setup Notifications</Button>
+                        </Card>
+                      </Col>
+                      <Col span={12}>
+                        <Card title="Database Maintenance" size="small">
+                          <p>Database backup, optimization, and cleanup tools.</p>
+                          <Button>Database Tools</Button>
+                        </Card>
+                      </Col>
+                    </Row>
+                  </div>
+                )
+              }
+            ]}
+          />
         </Card>
       </main>
 
       {/* Add User Modal */}
       <Modal
         title="Add New User"
-        visible={isUserModalVisible}
+        open={isUserModalVisible}
         onCancel={() => setIsUserModalVisible(false)}
         footer={null}
       >
@@ -374,7 +383,7 @@ const AdminDashboard: React.FC = () => {
       {/* Add Influencer Modal */}
       <Modal
         title="Add New Influencer"
-        visible={isInfluencerModalVisible}
+        open={isInfluencerModalVisible}
         onCancel={() => setIsInfluencerModalVisible(false)}
         footer={null}
       >

@@ -380,62 +380,91 @@ const UserDashboard: React.FC = () => {
               }
               className="activity-card"
             >
-              <Timeline>
-                <Timeline.Item color="green">
-                  <div className="activity-item">
-                    <span className="activity-text">@techguru123 - New analytics processed</span>
-                    <span className="activity-time">2 minutes ago</span>
-                  </div>
-                </Timeline.Item>
-                <Timeline.Item color="blue">
-                  <div className="activity-item">
-                    <span className="activity-text">@lifestyle_blogger - Sentiment analysis complete</span>
-                    <span className="activity-time">5 minutes ago</span>
-                  </div>
-                </Timeline.Item>
-                <Timeline.Item color="orange">
-                  <div className="activity-item">
-                    <span className="activity-text">@fitness_influencer - Data collection started</span>
-                    <span className="activity-time">1 hour ago</span>
-                  </div>
-                </Timeline.Item>
-                <Timeline.Item color="gray">
-                  <div className="activity-item">
-                    <span className="activity-text">System: Weekly analytics report generated</span>
-                    <span className="activity-time">3 hours ago</span>
-                  </div>
-                </Timeline.Item>
-                <Timeline.Item color="purple">
-                  <div className="activity-item">
-                    <span className="activity-text">@music_producer - New content engagement spike detected</span>
-                    <span className="activity-time">4 hours ago</span>
-                  </div>
-                </Timeline.Item>
-                <Timeline.Item color="green">
-                  <div className="activity-item">
-                    <span className="activity-text">@gaming_streamer - Viral post detected</span>
-                    <span className="activity-time">6 hours ago</span>
-                  </div>
-                </Timeline.Item>
-                <Timeline.Item color="blue">
-                  <div className="activity-item">
-                    <span className="activity-text">@fashion_stylist - Brand partnership analysis complete</span>
-                    <span className="activity-time">8 hours ago</span>
-                  </div>
-                </Timeline.Item>
-                <Timeline.Item color="orange">
-                  <div className="activity-item">
-                    <span className="activity-text">@book_reviewer - Monthly performance report ready</span>
-                    <span className="activity-time">10 hours ago</span>
-                  </div>
-                </Timeline.Item>
-                <Timeline.Item color="red">
-                  <div className="activity-item">
-                    <span className="activity-text">@crypto_analyst - Market sentiment shift detected</span>
-                    <span className="activity-time">12 hours ago</span>
-                  </div>
-                </Timeline.Item>
-              </Timeline>
+              <Timeline
+                items={[
+                  {
+                    color: 'green',
+                    children: (
+                      <div className="activity-item">
+                        <span className="activity-text">@techguru123 - New analytics processed</span>
+                        <span className="activity-time">2 minutes ago</span>
+                      </div>
+                    )
+                  },
+                  {
+                    color: 'blue',
+                    children: (
+                      <div className="activity-item">
+                        <span className="activity-text">@lifestyle_blogger - Sentiment analysis complete</span>
+                        <span className="activity-time">5 minutes ago</span>
+                      </div>
+                    )
+                  },
+                  {
+                    color: 'orange',
+                    children: (
+                      <div className="activity-item">
+                        <span className="activity-text">@fitness_influencer - Data collection started</span>
+                        <span className="activity-time">1 hour ago</span>
+                      </div>
+                    )
+                  },
+                  {
+                    color: 'gray',
+                    children: (
+                      <div className="activity-item">
+                        <span className="activity-text">System: Weekly analytics report generated</span>
+                        <span className="activity-time">3 hours ago</span>
+                      </div>
+                    )
+                  },
+                  {
+                    color: 'purple',
+                    children: (
+                      <div className="activity-item">
+                        <span className="activity-text">@music_producer - New content engagement spike detected</span>
+                        <span className="activity-time">4 hours ago</span>
+                      </div>
+                    )
+                  },
+                  {
+                    color: 'green',
+                    children: (
+                      <div className="activity-item">
+                        <span className="activity-text">@gaming_streamer - Viral post detected</span>
+                        <span className="activity-time">6 hours ago</span>
+                      </div>
+                    )
+                  },
+                  {
+                    color: 'blue',
+                    children: (
+                      <div className="activity-item">
+                        <span className="activity-text">@fashion_stylist - Brand partnership analysis complete</span>
+                        <span className="activity-time">8 hours ago</span>
+                      </div>
+                    )
+                  },
+                  {
+                    color: 'orange',
+                    children: (
+                      <div className="activity-item">
+                        <span className="activity-text">@book_reviewer - Monthly performance report ready</span>
+                        <span className="activity-time">10 hours ago</span>
+                      </div>
+                    )
+                  },
+                  {
+                    color: 'red',
+                    children: (
+                      <div className="activity-item">
+                        <span className="activity-text">@crypto_analyst - Market sentiment shift detected</span>
+                        <span className="activity-time">12 hours ago</span>
+                      </div>
+                    )
+                  }
+                ]}
+              />
             </Card>
           </Col>
         </Row>

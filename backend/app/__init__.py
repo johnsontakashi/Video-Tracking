@@ -30,9 +30,10 @@ def create_app(config_name='default'):
     
     # Configure CORS
     CORS(app, 
-         origins=['http://localhost:3001', 'http://localhost:3000'],
+         origins=['http://localhost:3001', 'http://localhost:3000', 'http://localhost:3003'],
          allow_headers=['Content-Type', 'Authorization'],
-         methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'])
+         methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+         supports_credentials=True)
     
     # Register blueprints
     from app.routes.auth import auth_bp
