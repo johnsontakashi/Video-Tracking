@@ -1,0 +1,243 @@
+.influencer-list {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header h2 {
+  margin: 0;
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 14px;
+}
+
+.filters-section {
+  margin-bottom: 16px;
+}
+
+.influencer-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.influencer-avatar {
+  flex-shrink: 0;
+}
+
+.influencer-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.influencer-name {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.display-name {
+  font-weight: 500;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.influencer-username {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.influencer-form .form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 16px;
+}
+
+/* Platform-specific styling */
+.ant-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .influencer-list {
+    padding: 16px;
+  }
+  
+  .filters-section .ant-space {
+    width: 100%;
+  }
+  
+  .filters-section .ant-input {
+    width: 100% !important;
+  }
+  
+  .form-row {
+    flex-direction: column;
+  }
+  
+  .form-row .ant-form-item {
+    width: 100% !important;
+  }
+}
+
+/* Table styling */
+.ant-table-thead > tr > th {
+  background: #fafafa;
+  font-weight: 600;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.ant-table-tbody > tr:hover > td {
+  background: #f5f5f5;
+}
+
+/* Badge styling for engagement rates */
+.ant-badge .ant-badge-count {
+  font-size: 11px;
+  height: 18px;
+  line-height: 18px;
+  min-width: 36px;
+  border-radius: 9px;
+  box-shadow: none;
+}
+
+/* Modal form styling */
+.influencer-form .ant-form-item-label > label {
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+.influencer-form .ant-input,
+.influencer-form .ant-select-selector {
+  border-radius: 6px;
+}
+
+.influencer-form .ant-input:focus,
+.influencer-form .ant-select-focused .ant-select-selector {
+  border-color: #00cc6c;
+  box-shadow: 0 0 0 2px rgba(0, 204, 108, 0.1);
+}
+
+/* POLITIKOS branding */
+.ant-btn-primary {
+  background: linear-gradient(135deg, #00cc6c 0%, #009c52 100%);
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.ant-btn-primary:hover {
+  background: linear-gradient(135deg, #009c52 0%, #00cc6c 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 204, 108, 0.3);
+}
+
+/* Custom scrollbar for table */
+.ant-table-body::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.ant-table-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.ant-table-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.ant-table-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Smooth scrolling */
+.ant-table-body {
+  scroll-behavior: smooth;
+}
+
+/* Loading state improvements */
+.ant-table-loading .ant-table-tbody > tr > td {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Status tag colors */
+.ant-tag.ant-tag-green {
+  background: #f6ffed;
+  border-color: #b7eb8f;
+  color: #52c41a;
+}
+
+.ant-tag.ant-tag-orange {
+  background: #fff7e6;
+  border-color: #ffd591;
+  color: #fa8c16;
+}
+
+/* Empty state styling */
+.ant-empty-description {
+  color: #999;
+}
+
+/* Pagination improvements */
+.ant-pagination {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.ant-pagination .ant-pagination-item {
+  border-radius: 4px;
+}
+
+.ant-pagination .ant-pagination-item-active {
+  background: #00cc6c;
+  border-color: #00cc6c;
+}
+
+.ant-pagination .ant-pagination-item-active a {
+  color: white;
+}
+
+/* Search input focus */
+.ant-input-search .ant-input:focus {
+  border-color: #00cc6c;
+  box-shadow: 0 0 0 2px rgba(0, 204, 108, 0.1);
+}
+
+.ant-input-search .ant-input-search-button {
+  background: #00cc6c;
+  border-color: #00cc6c;
+}
+
+.ant-input-search .ant-input-search-button:hover {
+  background: #009c52;
+  border-color: #009c52;
+}
