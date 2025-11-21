@@ -2,6 +2,8 @@
   min-height: 100vh;
   background: var(--politikos-gradient-data);
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  scroll-behavior: smooth;
+  overflow-y: auto;
 }
 
 .user-header {
@@ -289,6 +291,40 @@
   height: 400px;
 }
 
+/* Activity card specific scrolling */
+.activity-card .ant-card-body {
+  max-height: 320px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  padding-right: 4px;
+}
+
+/* Scrollbar styling for activity card */
+.activity-card .ant-card-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.activity-card .ant-card-body::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.activity-card .ant-card-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.activity-card .ant-card-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.activity-card .ant-card-body {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
 .analysis-card .ant-card-head-title,
 .leaderboard-card .ant-card-head-title,
 .trending-card .ant-card-head-title,
@@ -355,6 +391,37 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  max-height: 320px; /* Fixed max height to fit within card */
+  overflow-y: auto; /* Add vertical scrollbar when needed */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  padding-right: 4px; /* Add space for scrollbar */
+  scroll-behavior: smooth; /* Smooth scrolling */
+}
+
+/* Custom scrollbar styling for leaderboard */
+.leaderboard::-webkit-scrollbar {
+  width: 6px;
+}
+
+.leaderboard::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.leaderboard::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.leaderboard::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* For Firefox */
+.leaderboard {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
 .leaderboard-item {
@@ -430,6 +497,36 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  padding-right: 4px;
+}
+
+/* Scrollbar styling for trending list */
+.trending-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.trending-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.trending-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.trending-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.trending-list {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
 }
 
 .trending-item {
