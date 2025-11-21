@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { authService } from './authService';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 class AnalyticsService {
   private api = axios.create({
-    baseURL: `${API_BASE_URL}/analytics`,
+    baseURL: `${API_BASE_URL}/api/analytics`,
   });
 
   constructor() {

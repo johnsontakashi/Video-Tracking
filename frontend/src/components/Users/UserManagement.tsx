@@ -32,7 +32,7 @@ import {
   CalendarOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
-import moment from 'moment';
+// Using native Date functions instead of moment
 import './UserManagement.css';
 
 const { Option } = Select;
@@ -70,6 +70,22 @@ const planColors = {
   starter: '#1890ff',
   professional: '#722ed1',
   enterprise: '#fa8c16'
+};
+
+// Helper function for relative time
+const getRelativeTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffDays > 0) return `${diffDays} days ago`;
+  if (diffHours > 0) return `${diffHours} hours ago`;
+  if (diffMinutes > 0) return `${diffMinutes} minutes ago`;
+  return 'Just now';
 };
 
 const UserManagement: React.FC = () => {
@@ -325,10 +341,10 @@ const UserManagement: React.FC = () => {
       key: 'last_login',
       render: (lastLogin: string) => (
         lastLogin ? (
-          <Tooltip title={moment(lastLogin).format('YYYY-MM-DD HH:mm:ss')}>
+          <Tooltip title={new Date(lastLogin).toLocaleString()}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
               <CalendarOutlined />
-              {moment(lastLogin).fromNow()}
+              {getRelativeTime(lastLogin)}
             </span>
           </Tooltip>
         ) : (
@@ -339,7 +355,7 @@ const UserManagement: React.FC = () => {
         if (!a.last_login && !b.last_login) return 0;
         if (!a.last_login) return 1;
         if (!b.last_login) return -1;
-        return moment(a.last_login).unix() - moment(b.last_login).unix();
+        return new Date(a.last_login).getTime() - new Date(b.last_login).getTime();
       }
     },
     {
@@ -347,11 +363,15 @@ const UserManagement: React.FC = () => {
       dataIndex: 'created_at',
       key: 'created_at',
       render: (date: string) => (
-        <Tooltip title={moment(date).format('YYYY-MM-DD HH:mm:ss')}>
-          {moment(date).format('MMM DD, YYYY')}
+        <Tooltip title={new Date(date).toLocaleString()}>
+          {new Date(date).toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'short', 
+            day: '2-digit' 
+          })}
         </Tooltip>
       ),
-      sorter: (a: User, b: User) => moment(a.created_at).unix() - moment(b.created_at).unix()
+      sorter: (a: User, b: User) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     },
     {
       title: 'Actions',

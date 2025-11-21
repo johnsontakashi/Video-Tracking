@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { authService } from './authService';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 interface CreateInfluencerData {
   username: string;
@@ -21,7 +21,7 @@ interface CollectionTaskParams {
 
 class CollectionService {
   private api = axios.create({
-    baseURL: `${API_BASE_URL}/collection`,
+    baseURL: `${API_BASE_URL}/api/collection`,
   });
 
   constructor() {

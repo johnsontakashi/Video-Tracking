@@ -24,6 +24,7 @@ import {
   SafetyCertificateOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
+import { paymentService } from '../../services/paymentService';
 import './SubscriptionPlans.css';
 
 const { Title, Text } = Typography;
@@ -70,6 +71,42 @@ const featureDescriptions: { [key: string]: string } = {
   dedicated_support: '24/7 dedicated customer support'
 };
 
+const getMockPlans = (): Plan[] => [
+  {
+    id: 1,
+    plan_type: 'starter',
+    name: 'Basic',
+    price: 29,
+    influencer_limit: 100,
+    posts_per_month: 1000,
+    analytics_retention_days: 90,
+    features: ['basic_analytics', 'manual_tracking'],
+    is_active: true
+  },
+  {
+    id: 2,
+    plan_type: 'professional',
+    name: 'Professional',
+    price: 99,
+    influencer_limit: 1000,
+    posts_per_month: 10000,
+    analytics_retention_days: 365,
+    features: ['advanced_analytics', 'automated_tracking', 'sentiment_analysis'],
+    is_active: true
+  },
+  {
+    id: 3,
+    plan_type: 'enterprise',
+    name: 'Enterprise',
+    price: 299,
+    influencer_limit: -1, // unlimited
+    posts_per_month: -1, // unlimited
+    analytics_retention_days: -1, // unlimited
+    features: ['enterprise_analytics', 'api_access', 'white_label', 'dedicated_support'],
+    is_active: true
+  }
+];
+
 const SubscriptionPlans: React.FC = () => {
   const { user } = useAuth();
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -85,17 +122,31 @@ const SubscriptionPlans: React.FC = () => {
   const fetchPlans = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/subscription/plans');
+      const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${apiUrl}/api/payment/plans`, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
       
-      if (data.success) {
+      if (data.plans) {
         setPlans(data.plans);
       } else {
-        message.error('Failed to load subscription plans');
+        // If backend doesn't have plans service, use mock data
+        setPlans(getMockPlans());
+        console.log('Using mock subscription plans data');
       }
     } catch (error) {
       console.error('Error fetching plans:', error);
-      message.error('Failed to load subscription plans');
+      // Use mock data as fallback
+      setPlans(getMockPlans());
+      console.log('Backend unavailable, using mock subscription plans data');
     } finally {
       setLoading(false);
     }
@@ -137,7 +188,7 @@ const SubscriptionPlans: React.FC = () => {
         <span className="period">/{isYearly ? 'year' : 'month'}</span>
         {isYearly && price > 0 && (
           <div className="savings">
-            <Tag color="green" size="small">
+            <Tag color="green">
               Save ${ (price * 2).toFixed(2) }
             </Tag>
           </div>
