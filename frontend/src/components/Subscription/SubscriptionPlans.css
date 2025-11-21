@@ -1,0 +1,418 @@
+.subscription-plans {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: calc(100vh - 64px);
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+}
+
+.plans-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.header-content .ant-typography h2 {
+  color: #1e293b;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #00cc6c 0%, #0000cc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-description {
+  font-size: 18px;
+  color: #64748b;
+  margin-bottom: 32px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.billing-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 32px;
+}
+
+.billing-toggle .ant-space {
+  background: white;
+  padding: 16px 24px;
+  border-radius: 50px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.plans-grid {
+  margin-bottom: 48px;
+}
+
+.plan-card {
+  height: 100%;
+  border-radius: 20px;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.plan-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border-color: #00cc6c;
+}
+
+.plan-card.recommended {
+  border-color: #faad14;
+  border-width: 3px;
+  transform: scale(1.05);
+}
+
+.plan-card.recommended:hover {
+  transform: scale(1.05) translateY(-8px);
+}
+
+.plan-card.current-plan {
+  border-color: #52c41a;
+  background: linear-gradient(135deg, #f6ffed 0%, #f0f9ff 100%);
+}
+
+.recommended-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.current-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+}
+
+.plan-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.plan-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.plan-name {
+  color: #1e293b;
+  font-weight: 600;
+  margin-bottom: 16px !important;
+}
+
+.price-display {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.currency {
+  font-size: 20px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.amount {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.period {
+  font-size: 16px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.savings {
+  margin-left: 8px;
+}
+
+.plan-features {
+  margin-bottom: 32px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.feature-icon {
+  color: #00cc6c;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.plan-action {
+  margin-top: auto;
+}
+
+.plan-action .ant-btn {
+  height: 48px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.plan-action .ant-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.plans-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.guarantee-card {
+  max-width: 600px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.guarantee-card .ant-card-body {
+  padding: 32px;
+}
+
+.guarantee-card .ant-typography h4 {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Upgrade Modal Styling */
+.upgrade-confirmation .plan-summary {
+  margin-bottom: 24px;
+}
+
+.plan-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.billing-details ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.billing-details li {
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+/* Switch Customization */
+.ant-switch-checked {
+  background-color: #00cc6c !important;
+}
+
+.ant-switch:focus {
+  box-shadow: 0 0 0 2px rgba(0, 204, 108, 0.2) !important;
+}
+
+/* Badge Customization */
+.ant-badge-ribbon .ant-badge-ribbon-text {
+  font-weight: 600;
+  font-size: 12px;
+}
+
+/* Tag Customization */
+.ant-tag {
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+/* Button Customizations */
+.ant-btn-primary {
+  background: linear-gradient(135deg, #00cc6c 0%, #009c52 100%);
+  border: none;
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+  background: linear-gradient(135deg, #009c52 0%, #00cc6c 100%);
+  border: none;
+}
+
+/* Modal Customization */
+.ant-modal-header {
+  border-radius: 8px 8px 0 0;
+}
+
+.ant-modal-content {
+  border-radius: 12px;
+}
+
+.ant-modal-title {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .subscription-plans {
+    padding: 24px;
+  }
+  
+  .plans-grid .plan-card.recommended {
+    transform: none;
+  }
+  
+  .plans-grid .plan-card.recommended:hover {
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 768px) {
+  .subscription-plans {
+    padding: 16px;
+  }
+  
+  .header-content .ant-typography h2 {
+    font-size: 28px;
+  }
+  
+  .header-description {
+    font-size: 16px;
+  }
+  
+  .billing-toggle .ant-space {
+    padding: 12px 20px;
+  }
+  
+  .plan-card {
+    margin-bottom: 24px;
+  }
+  
+  .plan-icon {
+    font-size: 36px;
+  }
+  
+  .amount {
+    font-size: 28px;
+  }
+  
+  .guarantee-card .ant-card-body {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .billing-toggle {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .plans-grid {
+    margin-bottom: 32px;
+  }
+  
+  .feature-item {
+    font-size: 13px;
+  }
+  
+  .plan-action .ant-btn {
+    height: 44px;
+    font-size: 15px;
+  }
+}
+
+/* Animation Classes */
+.plan-card {
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+.plan-card:nth-child(1) { animation-delay: 0.1s; }
+.plan-card:nth-child(2) { animation-delay: 0.2s; }
+.plan-card:nth-child(3) { animation-delay: 0.3s; }
+.plan-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading Animation */
+.ant-spin-lg .ant-spin-dot {
+  font-size: 32px;
+}
+
+.ant-spin-lg .ant-spin-dot i {
+  background-color: #00cc6c;
+}
+
+/* Smooth Scrolling */
+.subscription-plans {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced Hover Effects */
+.plan-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0, 204, 108, 0.05) 0%, rgba(0, 0, 204, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 20px;
+  pointer-events: none;
+}
+
+.plan-card:hover::before {
+  opacity: 1;
+}
+
+/* Professional gradient effects */
+.plan-card.recommended::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg, #faad14, #ffd93d, #faad14);
+  z-index: -1;
+  border-radius: 22px;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
