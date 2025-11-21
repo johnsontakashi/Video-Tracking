@@ -9,7 +9,9 @@
   padding: var(--politikos-spacing-lg);
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 /* Brazilian Flag Pattern Background */
@@ -40,10 +42,38 @@
   box-shadow: var(--politikos-shadow-lg);
   width: 100%;
   max-width: 600px;
+  max-height: 90vh;
   padding: var(--politikos-spacing-2xl);
   border: 2px solid rgba(0, 0, 204, 0.1);
   position: relative;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar for auth card */
+.auth-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.auth-card::-webkit-scrollbar-track {
+  background: rgba(0, 0, 204, 0.1);
+  border-radius: 3px;
+}
+
+.auth-card::-webkit-scrollbar-thumb {
+  background: var(--politikos-blue);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.auth-card::-webkit-scrollbar-thumb:hover {
+  background: var(--politikos-green);
+}
+
+.auth-card {
+  scrollbar-width: thin;
+  scrollbar-color: var(--politikos-blue) rgba(0, 0, 204, 0.1);
 }
 
 .auth-card::before {

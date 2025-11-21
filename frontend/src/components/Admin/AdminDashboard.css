@@ -2,6 +2,8 @@
   min-height: 100vh;
   background: var(--politikos-gradient-primary);
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+  scroll-behavior: smooth;
+  overflow-y: auto;
 }
 
 .admin-header {

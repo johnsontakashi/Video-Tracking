@@ -13,6 +13,25 @@
   box-sizing: border-box;
 }
 
+/* Global smooth scrolling for entire application */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Smooth scrolling for all scrollable elements */
+* {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced smooth scrolling for webkit browsers */
+@media (prefers-reduced-motion: no-preference) {
+  html,
+  body,
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
 /* Loading Screen - POLITIKOS Branded */
 .loading-overlay {
   position: fixed;

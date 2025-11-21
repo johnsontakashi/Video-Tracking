@@ -270,6 +270,46 @@ const UserDashboard: React.FC = () => {
                   </div>
                   <span className="score">85.9</span>
                 </div>
+                <div className="leaderboard-item">
+                  <span className="rank">6</span>
+                  <div className="influencer-info">
+                    <span className="influencer-name">@music_producer</span>
+                    <span className="platform">TikTok</span>
+                  </div>
+                  <span className="score">84.1</span>
+                </div>
+                <div className="leaderboard-item">
+                  <span className="rank">7</span>
+                  <div className="influencer-info">
+                    <span className="influencer-name">@gaming_streamer</span>
+                    <span className="platform">Twitch</span>
+                  </div>
+                  <span className="score">82.7</span>
+                </div>
+                <div className="leaderboard-item">
+                  <span className="rank">8</span>
+                  <div className="influencer-info">
+                    <span className="influencer-name">@fashion_stylist</span>
+                    <span className="platform">Instagram</span>
+                  </div>
+                  <span className="score">81.3</span>
+                </div>
+                <div className="leaderboard-item">
+                  <span className="rank">9</span>
+                  <div className="influencer-info">
+                    <span className="influencer-name">@book_reviewer</span>
+                    <span className="platform">YouTube</span>
+                  </div>
+                  <span className="score">79.8</span>
+                </div>
+                <div className="leaderboard-item">
+                  <span className="rank">10</span>
+                  <div className="influencer-info">
+                    <span className="influencer-name">@crypto_analyst</span>
+                    <span className="platform">Twitter</span>
+                  </div>
+                  <span className="score">78.4</span>
+                </div>
               </div>
             </Card>
           </Col>
@@ -307,6 +347,26 @@ const UserDashboard: React.FC = () => {
                   <span className="trend-topic">#HealthWellness</span>
                   <span className="trend-growth positive">↗ +11%</span>
                 </div>
+                <div className="trending-item">
+                  <span className="trend-topic">#FoodTech</span>
+                  <span className="trend-growth positive">↗ +7%</span>
+                </div>
+                <div className="trending-item">
+                  <span className="trend-topic">#RemoteWork</span>
+                  <span className="trend-growth negative">↘ -2%</span>
+                </div>
+                <div className="trending-item">
+                  <span className="trend-topic">#Cryptocurrency</span>
+                  <span className="trend-growth positive">↗ +14%</span>
+                </div>
+                <div className="trending-item">
+                  <span className="trend-topic">#ClimateChange</span>
+                  <span className="trend-growth positive">↗ +6%</span>
+                </div>
+                <div className="trending-item">
+                  <span className="trend-topic">#EdTech</span>
+                  <span className="trend-growth positive">↗ +9%</span>
+                </div>
               </div>
             </Card>
           </Col>
@@ -343,6 +403,36 @@ const UserDashboard: React.FC = () => {
                   <div className="activity-item">
                     <span className="activity-text">System: Weekly analytics report generated</span>
                     <span className="activity-time">3 hours ago</span>
+                  </div>
+                </Timeline.Item>
+                <Timeline.Item color="purple">
+                  <div className="activity-item">
+                    <span className="activity-text">@music_producer - New content engagement spike detected</span>
+                    <span className="activity-time">4 hours ago</span>
+                  </div>
+                </Timeline.Item>
+                <Timeline.Item color="green">
+                  <div className="activity-item">
+                    <span className="activity-text">@gaming_streamer - Viral post detected</span>
+                    <span className="activity-time">6 hours ago</span>
+                  </div>
+                </Timeline.Item>
+                <Timeline.Item color="blue">
+                  <div className="activity-item">
+                    <span className="activity-text">@fashion_stylist - Brand partnership analysis complete</span>
+                    <span className="activity-time">8 hours ago</span>
+                  </div>
+                </Timeline.Item>
+                <Timeline.Item color="orange">
+                  <div className="activity-item">
+                    <span className="activity-text">@book_reviewer - Monthly performance report ready</span>
+                    <span className="activity-time">10 hours ago</span>
+                  </div>
+                </Timeline.Item>
+                <Timeline.Item color="red">
+                  <div className="activity-item">
+                    <span className="activity-text">@crypto_analyst - Market sentiment shift detected</span>
+                    <span className="activity-time">12 hours ago</span>
                   </div>
                 </Timeline.Item>
               </Timeline>
