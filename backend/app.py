@@ -382,6 +382,155 @@ def update_user(user_id):
         return jsonify({'success': False, 'message': 'Update failed'}), 500
 
 # ============================================================================
+# Influencers Routes
+# ============================================================================
+
+@app.route('/api/influencers', methods=['GET', 'POST'])
+def manage_influencers():
+    """Get all influencers or create new influencer"""
+    user = validate_auth_token(request.headers.get('Authorization', ''))
+    
+    if not user:
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 401
+    
+    try:
+        if request.method == 'GET':
+            # Return mock influencer data for now
+            mock_influencers = [
+                {
+                    'id': 1,
+                    'external_id': 'influencer_001',
+                    'username': '@johndoe',
+                    'display_name': 'John Doe',
+                    'platform': 'instagram',
+                    'bio': 'Travel blogger and photographer',
+                    'profile_image_url': '',
+                    'verified': True,
+                    'follower_count': 125000,
+                    'following_count': 500,
+                    'post_count': 850,
+                    'engagement_rate': 4.2,
+                    'status': 'active',
+                    'created_at': '2024-01-15T10:30:00Z',
+                    'owner_name': user['first_name'] + ' ' + user['last_name']
+                },
+                {
+                    'id': 2,
+                    'external_id': 'influencer_002',
+                    'username': '@sarahsmith',
+                    'display_name': 'Sarah Smith',
+                    'platform': 'youtube',
+                    'bio': 'Lifestyle and fashion content creator',
+                    'profile_image_url': '',
+                    'verified': False,
+                    'follower_count': 89000,
+                    'following_count': 200,
+                    'post_count': 420,
+                    'engagement_rate': 6.8,
+                    'status': 'active',
+                    'created_at': '2024-02-20T14:15:00Z',
+                    'owner_name': user['first_name'] + ' ' + user['last_name']
+                }
+            ]
+            
+            return jsonify({
+                'success': True,
+                'influencers': mock_influencers
+            })
+        
+        elif request.method == 'POST':
+            # Create new influencer
+            data = request.get_json()
+            
+            # Validate required fields
+            required_fields = ['username', 'platform']
+            for field in required_fields:
+                if not data or not data.get(field):
+                    return jsonify({
+                        'success': False,
+                        'error': 'validation_error',
+                        'message': f'{field.replace("_", " ").title()} is required'
+                    }), 400
+            
+            # Create mock influencer response
+            new_influencer = {
+                'id': 999,  # Mock ID
+                'external_id': f"influencer_{data['username']}",
+                'username': data.get('username', ''),
+                'display_name': data.get('display_name', ''),
+                'platform': data.get('platform', ''),
+                'bio': data.get('bio', ''),
+                'profile_image_url': data.get('profile_image_url', ''),
+                'verified': data.get('verified', False),
+                'follower_count': data.get('follower_count', 0),
+                'following_count': data.get('following_count', 0),
+                'post_count': data.get('post_count', 0),
+                'engagement_rate': data.get('engagement_rate', 0.0),
+                'status': 'active',
+                'created_at': datetime.utcnow().isoformat(),
+                'owner_name': user['first_name'] + ' ' + user['last_name']
+            }
+            
+            return jsonify({
+                'success': True,
+                'message': 'Influencer created successfully',
+                'influencer': new_influencer
+            }), 201
+            
+    except Exception as e:
+        logger.error(f"Manage influencers error: {str(e)}")
+        return jsonify({'success': False, 'message': 'Operation failed'}), 500
+
+@app.route('/api/influencers/<int:influencer_id>', methods=['PUT', 'DELETE'])
+def update_influencer(influencer_id):
+    """Update or delete influencer"""
+    user = validate_auth_token(request.headers.get('Authorization', ''))
+    
+    if not user:
+        return jsonify({'success': False, 'message': 'Unauthorized'}), 401
+    
+    try:
+        if request.method == 'PUT':
+            data = request.get_json()
+            if not data:
+                return jsonify({'success': False, 'message': 'No data provided'}), 400
+            
+            # Mock update response
+            updated_influencer = {
+                'id': influencer_id,
+                'external_id': f"influencer_{data.get('username', '')}",
+                'username': data.get('username', ''),
+                'display_name': data.get('display_name', ''),
+                'platform': data.get('platform', ''),
+                'bio': data.get('bio', ''),
+                'profile_image_url': data.get('profile_image_url', ''),
+                'verified': data.get('verified', False),
+                'follower_count': data.get('follower_count', 0),
+                'following_count': data.get('following_count', 0),
+                'post_count': data.get('post_count', 0),
+                'engagement_rate': data.get('engagement_rate', 0.0),
+                'status': data.get('status', 'active'),
+                'created_at': '2024-01-15T10:30:00Z',
+                'owner_name': user['first_name'] + ' ' + user['last_name']
+            }
+            
+            return jsonify({
+                'success': True,
+                'message': 'Influencer updated successfully',
+                'influencer': updated_influencer
+            })
+        
+        elif request.method == 'DELETE':
+            return jsonify({
+                'success': True,
+                'message': 'Influencer deleted successfully'
+            })
+            
+    except Exception as e:
+        logger.error(f"Update influencer error: {str(e)}")
+        return jsonify({'success': False, 'message': 'Operation failed'}), 500
+
+# ============================================================================
 # Health Check Routes
 # ============================================================================
 

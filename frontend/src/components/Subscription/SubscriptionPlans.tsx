@@ -25,6 +25,7 @@ import {
 } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
 import { paymentService } from '../../services/paymentService';
+import DashboardNavigation from '../Navigation/DashboardNavigation';
 import './SubscriptionPlans.css';
 
 const { Title, Text } = Typography;
@@ -73,14 +74,25 @@ const featureDescriptions: { [key: string]: string } = {
 
 const getMockPlans = (): Plan[] => [
   {
+    id: 0,
+    plan_type: 'free',
+    name: 'Free',
+    price: 0,
+    influencer_limit: 10,
+    posts_per_month: 100,
+    analytics_retention_days: 30,
+    features: ['basic_analytics', 'manual_tracking'],
+    is_active: true
+  },
+  {
     id: 1,
     plan_type: 'starter',
-    name: 'Basic',
+    name: 'Starter',
     price: 29,
     influencer_limit: 100,
     posts_per_month: 1000,
     analytics_retention_days: 90,
-    features: ['basic_analytics', 'manual_tracking'],
+    features: ['basic_analytics', 'manual_tracking', 'automated_tracking'],
     is_active: true
   },
   {
@@ -91,7 +103,7 @@ const getMockPlans = (): Plan[] => [
     influencer_limit: 1000,
     posts_per_month: 10000,
     analytics_retention_days: 365,
-    features: ['advanced_analytics', 'automated_tracking', 'sentiment_analysis'],
+    features: ['advanced_analytics', 'automated_tracking', 'sentiment_analysis', 'custom_reports'],
     is_active: true
   },
   {
@@ -210,17 +222,20 @@ const SubscriptionPlans: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="subscription-plans">
-        <div className="loading-container">
-          <Spin size="large" />
-          <div style={{ marginTop: 16, color: '#666' }}>Loading subscription plans...</div>
+      <DashboardNavigation>
+        <div className="subscription-plans">
+          <div className="loading-container">
+            <Spin size="large" />
+            <div style={{ marginTop: 16, color: '#666' }}>Loading subscription plans...</div>
+          </div>
         </div>
-      </div>
+      </DashboardNavigation>
     );
   }
 
   return (
-    <div className="subscription-plans">
+    <DashboardNavigation>
+      <div className="subscription-plans">
       <div className="plans-header">
         <div className="header-content">
           <Title level={2}>Choose Your Plan</Title>
@@ -245,7 +260,7 @@ const SubscriptionPlans: React.FC = () => {
         </div>
       </div>
 
-      <Row gutter={[24, 24]} className="plans-grid">
+      <Row gutter={[24, 24]} className="plans-grid" justify="center">
         {plans.map((plan) => (
           <Col xs={24} sm={12} lg={6} key={plan.id}>
             <Card
@@ -298,7 +313,7 @@ const SubscriptionPlans: React.FC = () => {
                 </div>
                 <div className="feature-item">
                   <ClockCircleOutlined className="feature-icon" />
-                  <span>{plan.analytics_retention_days} days data retention</span>
+                  <span>{plan.analytics_retention_days === -1 ? 'Unlimited' : plan.analytics_retention_days + ' days'} data retention</span>
                 </div>
                 
                 {plan.features.map((feature, index) => (
@@ -413,7 +428,8 @@ const SubscriptionPlans: React.FC = () => {
           </div>
         )}
       </Modal>
-    </div>
+      </div>
+    </DashboardNavigation>
   );
 };
 

@@ -1,9 +1,10 @@
 .subscription-plans {
-  padding: 32px;
+  padding: 32px 24px;
   max-width: 1400px;
   margin: 0 auto;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f0f9ff 100%);
   min-height: calc(100vh - 64px);
+  position: relative;
 }
 
 .loading-container {
@@ -21,13 +22,15 @@
 
 .header-content .ant-typography h2 {
   color: #1e293b;
-  font-size: 36px;
-  font-weight: 700;
+  font-size: 42px;
+  font-weight: 800;
   margin-bottom: 16px;
-  background: linear-gradient(135deg, #00cc6c 0%, #0000cc 100%);
+  background: linear-gradient(135deg, #1890ff 0%, #722ed1 50%, #fa541c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  text-align: center;
+  letter-spacing: -0.5px;
 }
 
 .header-description {
@@ -59,28 +62,33 @@
 
 .plan-card {
   height: 100%;
-  border-radius: 20px;
-  border: 2px solid #e2e8f0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 24px;
+  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
 .plan-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-  border-color: #00cc6c;
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  border-color: #1890ff;
 }
 
 .plan-card.recommended {
-  border-color: #faad14;
-  border-width: 3px;
-  transform: scale(1.05);
+  border-color: #722ed1;
+  border-width: 2px;
+  background: linear-gradient(145deg, rgba(114, 46, 209, 0.05) 0%, rgba(255, 255, 255, 0.95) 100%);
+  transform: scale(1.03);
+  box-shadow: 0 12px 48px rgba(114, 46, 209, 0.15);
 }
 
 .plan-card.recommended:hover {
-  transform: scale(1.05) translateY(-8px);
+  transform: scale(1.05) translateY(-12px);
+  box-shadow: 0 25px 70px rgba(114, 46, 209, 0.25);
 }
 
 .plan-card.current-plan {
@@ -173,11 +181,13 @@
 }
 
 .plan-action .ant-btn {
-  height: 48px;
+  height: 52px;
   font-size: 16px;
   font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+  border-radius: 16px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .plan-action .ant-btn:hover {
@@ -250,14 +260,17 @@
 
 /* Button Customizations */
 .ant-btn-primary {
-  background: linear-gradient(135deg, #00cc6c 0%, #009c52 100%);
+  background: linear-gradient(135deg, #1890ff 0%, #722ed1 100%);
   border: none;
+  box-shadow: 0 4px 16px rgba(24, 144, 255, 0.3);
 }
 
 .ant-btn-primary:hover,
 .ant-btn-primary:focus {
-  background: linear-gradient(135deg, #009c52 0%, #00cc6c 100%);
+  background: linear-gradient(135deg, #0066cc 0%, #5a1f99 100%);
   border: none;
+  box-shadow: 0 8px 24px rgba(24, 144, 255, 0.4);
+  transform: translateY(-2px);
 }
 
 /* Modal Customization */

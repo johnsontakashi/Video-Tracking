@@ -26,6 +26,7 @@ import {
   CheckCircleOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
+import DashboardNavigation from '../Navigation/DashboardNavigation';
 import './InfluencerList.css';
 
 const { Option } = Select;
@@ -71,7 +72,7 @@ const getMockInfluencers = (): Influencer[] => [
     display_name: "Tech Guru",
     platform: "instagram",
     bio: "Technology enthusiast sharing the latest trends",
-    profile_image_url: "https://via.placeholder.com/64",
+    profile_image_url: "",
     verified: true,
     follower_count: 125000,
     following_count: 1200,
@@ -88,7 +89,7 @@ const getMockInfluencers = (): Influencer[] => [
     display_name: "Fashion Rio",
     platform: "instagram",
     bio: "Fashion influencer from Rio de Janeiro",
-    profile_image_url: "https://via.placeholder.com/64",
+    profile_image_url: "",
     verified: false,
     follower_count: 89000,
     following_count: 850,
@@ -104,7 +105,7 @@ const getMockInfluencers = (): Influencer[] => [
     display_name: "Fitness Coach SP",
     platform: "youtube",
     bio: "Personal trainer helping you achieve your fitness goals",
-    profile_image_url: "https://via.placeholder.com/64",
+    profile_image_url: "",
     verified: true,
     follower_count: 67000,
     following_count: 400,
@@ -127,6 +128,17 @@ const InfluencerList: React.FC = () => {
 
   useEffect(() => {
     fetchInfluencers();
+    
+    // Listen for the add modal trigger from navigation
+    const handleOpenAddModal = () => {
+      handleAddInfluencer();
+    };
+    
+    window.addEventListener('openAddModal', handleOpenAddModal);
+    
+    return () => {
+      window.removeEventListener('openAddModal', handleOpenAddModal);
+    };
   }, []);
 
   const fetchInfluencers = async () => {
@@ -147,7 +159,8 @@ const InfluencerList: React.FC = () => {
       
       // Try to fetch from backend
       const token = localStorage.getItem('access_token');
-      const response = await fetch('/api/collection/influencers', {
+      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${baseURL}/api/influencers`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -184,10 +197,11 @@ const InfluencerList: React.FC = () => {
   const handleSubmit = async (values: any) => {
     try {
       const token = localStorage.getItem('access_token');
+      const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
       const method = editingInfluencer ? 'PUT' : 'POST';
       const url = editingInfluencer 
-        ? `/api/influencers/${editingInfluencer.id}`
-        : '/api/influencers';
+        ? `${baseURL}/api/influencers/${editingInfluencer.id}`
+        : `${baseURL}/api/influencers`;
 
       const response = await fetch(url, {
         method,
@@ -199,15 +213,66 @@ const InfluencerList: React.FC = () => {
       });
 
       const data = await response.json();
+      console.log('API Response:', data);
       
       if (data.success) {
-        message.success(
-          editingInfluencer 
-            ? 'Influencer updated successfully' 
-            : 'Influencer added successfully'
-        );
-        setIsModalVisible(false);
-        fetchInfluencers();
+        // Show success message with longer duration and icon
+        console.log('Showing success message...');
+        message.success({
+          content: editingInfluencer 
+            ? '✅ Influencer updated successfully!' 
+            : '✅ Influencer added successfully!',
+          duration: 3,
+          style: {
+            marginTop: '20vh',
+            fontSize: '16px'
+          }
+        });
+        
+        // Also try a simple message as backup
+        message.success('Operation completed successfully!');
+        
+        // Delay closing modal to show success message
+        setTimeout(() => {
+          setIsModalVisible(false);
+          setEditingInfluencer(null);
+          form.resetFields();
+        }, 500);
+        
+        if (editingInfluencer) {
+          // Update existing influencer in state
+          setInfluencers(prev => prev.map(inf => 
+            inf.id === editingInfluencer.id 
+              ? { ...inf, ...values, id: inf.id }
+              : inf
+          ));
+        } else {
+          // Add new influencer to state
+          const newInfluencer = {
+            id: Date.now(), // Temporary ID
+            external_id: `influencer_${values.username}`,
+            username: values.username || '',
+            display_name: values.display_name || '',
+            platform: values.platform || '',
+            bio: values.bio || '',
+            profile_image_url: values.profile_image_url || '',
+            verified: values.verified || false,
+            follower_count: values.follower_count || 0,
+            following_count: values.following_count || 0,
+            post_count: values.post_count || 0,
+            engagement_rate: values.engagement_rate || 0,
+            status: 'active',
+            created_at: new Date().toISOString(),
+            owner_name: user?.first_name + ' ' + user?.last_name || ''
+          };
+          
+          setInfluencers(prev => [newInfluencer, ...prev]);
+        }
+        
+        // Also refresh from backend if not using mock data
+        if (process.env.REACT_APP_USE_MOCK_DATA !== 'true' && process.env.NODE_ENV !== 'development') {
+          fetchInfluencers();
+        }
       } else {
         message.error(data.message || 'Operation failed');
       }
@@ -244,7 +309,7 @@ const InfluencerList: React.FC = () => {
         <div className="influencer-info">
           <Avatar
             size={40}
-            src={record.profile_image_url}
+            src={record.profile_image_url || undefined}
             icon={<UserOutlined />}
             className="influencer-avatar"
           />
@@ -360,8 +425,9 @@ const InfluencerList: React.FC = () => {
   ];
 
   return (
-    <div className="influencer-list">
-      <Card
+    <DashboardNavigation>
+      <div className="influencer-list">
+        <Card
         title={
           <div className="page-header">
             <h2>Influencer Management</h2>
@@ -524,8 +590,9 @@ const InfluencerList: React.FC = () => {
             </Space>
           </div>
         </Form>
-      </Modal>
-    </div>
+        </Modal>
+      </div>
+    </DashboardNavigation>
   );
 };
 

@@ -1,58 +1,29 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Card, Row, Col, Button, Progress, Timeline } from 'antd';
+import { Card, Row, Col, Progress, Timeline } from 'antd';
 import {
   BarChartOutlined,
   PieChartOutlined,
   TrophyOutlined,
   HeartOutlined,
-  LogoutOutlined,
   UserOutlined,
   FireOutlined,
   ThunderboltOutlined
 } from '@ant-design/icons';
-import PolitikosLogo, { PolitikosLogoText } from '../Brand/PolitikosLogo';
+import DashboardNavigation from '../Navigation/DashboardNavigation';
 import './UserDashboard.css';
 
 const UserDashboard: React.FC = () => {
-  const { user, logout } = useAuth();
-
-  const handleLogout = async () => {
-    try {
-      await logout();
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
-  };
+  const { user } = useAuth();
 
   if (!user) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="user-dashboard">
-      <header className="user-header">
-        <div className="user-header-left">
-          <PolitikosLogoText size="large" className="user-logo" />
-          <div className="user-title">
-            <h1>Análises Políticas</h1>
-            <span className="user-subtitle">Dashboard de Dados e Tendências</span>
-          </div>
-        </div>
-        <div className="user-header-right">
-          <span className="welcome-text">Welcome, {user.full_name}</span>
-          <span className="user-role">{user.role.toUpperCase()}</span>
-          <Button 
-            onClick={handleLogout} 
-            className="logout-button"
-            icon={<LogoutOutlined />}
-          >
-            Logout
-          </Button>
-        </div>
-      </header>
-
-      <main className="user-content">
+    <DashboardNavigation>
+      <div className="user-dashboard">
+        <main className="user-content">
         {/* User Profile Overview */}
         <Row gutter={[16, 16]} style={{ marginBottom: 24 }}>
           <Col span={8}>
@@ -468,8 +439,9 @@ const UserDashboard: React.FC = () => {
             </Card>
           </Col>
         </Row>
-      </main>
-    </div>
+        </main>
+      </div>
+    </DashboardNavigation>
   );
 };
 
