@@ -18,7 +18,7 @@ import {
   UserOutlined,
   LikeOutlined,
   EyeOutlined,
-  TrendingUpOutlined,
+  RiseOutlined,
   DownloadOutlined,
   FilterOutlined
 } from '@ant-design/icons';
@@ -270,7 +270,7 @@ const AnalyticsDashboard: React.FC = () => {
               title="Avg Engagement Rate"
               value={analyticsData.avg_engagement_rate}
               suffix="%"
-              prefix={<TrendingUpOutlined style={{ color: '#ff6b6b' }} />}
+              prefix={<RiseOutlined style={{ color: '#ff6b6b' }} />}
               valueStyle={{ color: '#ff6b6b' }}
               precision={1}
             />
@@ -310,7 +310,7 @@ const AnalyticsDashboard: React.FC = () => {
                   cx="50%"
                   cy="50%"
                   outerRadius={80}
-                  label={(entry) => entry.platform}
+                  label={(entry: any) => entry.platform}
                 >
                   {analyticsData.top_platforms.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />

@@ -10,6 +10,8 @@ interface User {
   role: string;
   is_active: boolean;
   email_verified: boolean;
+  current_plan?: string;
+  subscription_expires_at?: string;
   last_login?: string;
   created_at: string;
   updated_at: string;
