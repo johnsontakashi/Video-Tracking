@@ -39,8 +39,37 @@ class PaymentService {
 
   // Plans (public endpoint)
   async getPlans() {
-    const response = await axios.get(`${API_BASE_URL}/api/payment/plans`);
-    return response.data;
+    // In development, check if backend is available first
+    if (process.env.NODE_ENV === 'development') {
+      try {
+        const healthCheck = await axios.get(`${API_BASE_URL}/api/health`, {
+          timeout: 1000,
+          // Suppress axios error logging for this check
+          transformRequest: [(data, headers) => {
+            delete headers['X-Requested-With'];
+            return data;
+          }]
+        });
+        if (!healthCheck.data) {
+          throw new Error('BACKEND_UNAVAILABLE');
+        }
+      } catch (error) {
+        // Backend is not available, fail silently
+        throw new Error('BACKEND_UNAVAILABLE');
+      }
+    }
+
+    try {
+      const response = await axios.get(`${API_BASE_URL}/api/payment/plans`, {
+        timeout: process.env.NODE_ENV === 'development' ? 2000 : 10000
+      });
+      return response.data;
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        throw new Error('BACKEND_UNAVAILABLE');
+      }
+      throw error;
+    }
   }
 
   // Subscription info

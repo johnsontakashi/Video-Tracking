@@ -39,8 +39,54 @@ class AnalyticsService {
 
   // Dashboard data
   async getDashboard() {
-    const response = await this.api.get('/dashboard');
-    return response.data;
+    // Check if we should use mock data
+    const useMockData = process.env.REACT_APP_USE_MOCK_DATA === 'true' || 
+                       process.env.NODE_ENV === 'development';
+    
+    if (useMockData) {
+      // Return mock dashboard data
+      return {
+        summary: {
+          total_influencers: 1247,
+          total_posts: 8456,
+          total_engagement: 342567,
+          avg_engagement_rate: 4.2,
+          top_platforms: [
+            { platform: 'Instagram', count: 520 },
+            { platform: 'YouTube', count: 340 },
+            { platform: 'TikTok', count: 287 },
+            { platform: 'Twitter', count: 100 }
+          ],
+          engagement_trend: [
+            { date: '2024-01-01', engagement: 12450 },
+            { date: '2024-01-02', engagement: 13200 },
+            { date: '2024-01-03', engagement: 11800 },
+            { date: '2024-01-04', engagement: 14600 },
+            { date: '2024-01-05', engagement: 15100 },
+            { date: '2024-01-06', engagement: 13900 },
+            { date: '2024-01-07', engagement: 16200 }
+          ]
+        },
+        trending_topics: [
+          { keyword: '#sustainability', velocity: 85, mentions: 1250 },
+          { keyword: '#tech2024', velocity: 72, mentions: 980 },
+          { keyword: '#wellness', velocity: 68, mentions: 890 }
+        ],
+        top_performers: [
+          { username: 'techguru123', platform: 'instagram', influence_score: 92.4 },
+          { username: 'fashionista_rio', platform: 'instagram', influence_score: 88.1 },
+          { username: 'fitness_coach_sp', platform: 'youtube', influence_score: 85.7 }
+        ]
+      };
+    }
+
+    try {
+      const response = await this.api.get('/dashboard');
+      return response.data;
+    } catch (error) {
+      console.warn('Failed to fetch dashboard from backend, using mock data');
+      throw new Error('BACKEND_UNAVAILABLE');
+    }
   }
 
   // Influencer analytics
