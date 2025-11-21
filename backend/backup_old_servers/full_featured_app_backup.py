@@ -16,7 +16,11 @@ import logging
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=['http://localhost:3000', 'http://localhost:3001'])
+CORS(app, 
+     origins=['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3003'],
+     allow_headers=['Content-Type', 'Authorization'],
+     methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+     supports_credentials=True)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -635,7 +639,19 @@ def login():
 def get_me():
     # Mock authenticated user response - in real app would validate token
     auth_header = request.headers.get('Authorization', '')
-    if 'mock_access_token' not in auth_header:
+    
+    # Check if authorization header is present and in correct format
+    if not auth_header.startswith('Bearer '):
+        return jsonify({
+            'success': False,
+            'error': 'unauthorized',
+            'message': 'Invalid authorization header format'
+        }), 401
+    
+    # Extract token from "Bearer mock_access_token_1" format
+    token = auth_header.split(' ', 1)[1] if len(auth_header.split(' ', 1)) > 1 else ''
+    
+    if not token.startswith('mock_access_token_'):
         return jsonify({
             'success': False,
             'error': 'unauthorized',
@@ -644,15 +660,15 @@ def get_me():
     
     # Extract user ID from mock token
     try:
-        user_id = int(auth_header.split('_')[-1])
+        user_id = int(token.split('_')[-1])
         user = find_user_by_id(user_id)
         
         if not user:
             return jsonify({
                 'success': False,
-                'error': 'user_not_found',
-                'message': 'User not found'
-            }), 404
+                'error': 'unauthorized',
+                'message': 'Invalid token - user not found'
+            }), 401
         
         user_response = {k: v for k, v in user.items() if k != 'password'}
         user_response['full_name'] = f"{user['first_name']} {user['last_name']}"
@@ -730,34 +746,89 @@ def request_password_reset():
         }), 500
 
 # User management routes
-@app.route('/api/users', methods=['GET'])
-def get_users():
+@app.route('/api/users', methods=['GET', 'POST'])
+def manage_users():
     try:
-        # Mock auth check
+        # Mock auth check - use same validation as get_me endpoint
         auth_header = request.headers.get('Authorization', '')
-        if 'mock_access_token' not in auth_header:
+        if not auth_header.startswith('Bearer '):
             return jsonify({'success': False, 'message': 'Unauthorized'}), 401
         
-        db = get_db()
-        cursor = db.execute('''
-            SELECT id, email, first_name, last_name, username, role, is_active, email_verified, 
-                   current_plan, created_at, last_login
-            FROM users ORDER BY created_at DESC
-        ''')
+        token = auth_header.split(' ', 1)[1] if len(auth_header.split(' ', 1)) > 1 else ''
+        if not token.startswith('mock_access_token_'):
+            return jsonify({'success': False, 'message': 'Unauthorized'}), 401
         
-        users = []
-        for row in cursor.fetchall():
-            user = dict(row)
-            user['full_name'] = f"{user['first_name']} {user['last_name']}"
-            users.append(user)
+        if request.method == 'GET':
+            # Get all users
+            db = get_db()
+            cursor = db.execute('''
+                SELECT id, email, first_name, last_name, username, role, is_active, email_verified, 
+                       current_plan, created_at, last_login
+                FROM users ORDER BY created_at DESC
+            ''')
+            
+            users = []
+            for row in cursor.fetchall():
+                user = dict(row)
+                user['full_name'] = f"{user['first_name']} {user['last_name']}"
+                users.append(user)
+            
+            return jsonify({
+                'success': True,
+                'users': users
+            })
         
-        return jsonify({
-            'success': True,
-            'users': users
-        })
+        elif request.method == 'POST':
+            # Create new user
+            data = request.get_json()
+            
+            # Validate required fields
+            required_fields = ['first_name', 'last_name', 'email', 'password']
+            for field in required_fields:
+                if not data or not data.get(field):
+                    return jsonify({
+                        'success': False,
+                        'error': 'validation_error',
+                        'message': f'{field.replace("_", " ").title()} is required'
+                    }), 400
+            
+            # Check if user already exists
+            if find_user_by_email(data['email']):
+                return jsonify({
+                    'success': False,
+                    'error': 'user_exists',
+                    'message': 'User with this email already exists'
+                }), 409
+            
+            # Create user
+            new_user = create_user(
+                email=data['email'],
+                password=data['password'],
+                first_name=data['first_name'],
+                last_name=data['last_name'],
+                role=data.get('role', 'guest')
+            )
+            
+            if not new_user:
+                return jsonify({
+                    'success': False,
+                    'error': 'creation_failed',
+                    'message': 'Failed to create user'
+                }), 500
+            
+            # Return created user (without password)
+            user_response = {k: v for k, v in new_user.items() if k != 'password'}
+            user_response['full_name'] = f"{new_user['first_name']} {new_user['last_name']}"
+            
+            return jsonify({
+                'success': True,
+                'message': 'User created successfully',
+                'user': user_response
+            }), 201
+            
     except Exception as e:
-        logger.error(f"Get users error: {str(e)}")
-        return jsonify({'success': False, 'message': 'Failed to fetch users'}), 500
+        logger.error(f"Manage users error: {str(e)}")
+        return jsonify({'success': False, 'message': 'Operation failed'}), 500
 
 @app.route('/api/users/<int:user_id>', methods=['PUT'])
 def update_user(user_id):

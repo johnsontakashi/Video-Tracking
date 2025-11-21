@@ -247,6 +247,72 @@ def get_users():
         ]
     })
 
+@app.route('/api/users', methods=['POST', 'OPTIONS'])
+def create_user():
+    if request.method == 'OPTIONS':
+        # Handle preflight request
+        response = jsonify({'message': 'OK'})
+        response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin', '*'))
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
+        return response
+    
+    data = request.get_json() or {}
+    
+    # Mock user creation - simulate success
+    new_user = {
+        'id': 999,  # Mock ID
+        'email': data.get('email'),
+        'first_name': data.get('first_name'),
+        'last_name': data.get('last_name'),
+        'full_name': f"{data.get('first_name', '')} {data.get('last_name', '')}",
+        'username': data.get('username'),
+        'role': data.get('role', 'guest'),
+        'is_active': data.get('is_active', True),
+        'email_verified': False,
+        'current_plan': 'free',
+        'created_at': '2024-01-21T00:00:00Z'
+    }
+    
+    return jsonify({
+        'success': True,
+        'message': 'User created successfully',
+        'user': new_user
+    })
+
+@app.route('/api/users/<int:user_id>', methods=['PUT', 'OPTIONS'])
+def update_user(user_id):
+    if request.method == 'OPTIONS':
+        # Handle preflight request
+        response = jsonify({'message': 'OK'})
+        response.headers.add('Access-Control-Allow-Origin', request.headers.get('Origin', '*'))
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS')
+        return response
+    
+    data = request.get_json() or {}
+    
+    # Mock user update - simulate success
+    updated_user = {
+        'id': user_id,
+        'email': data.get('email'),
+        'first_name': data.get('first_name'),
+        'last_name': data.get('last_name'),
+        'full_name': f"{data.get('first_name', '')} {data.get('last_name', '')}",
+        'username': data.get('username'),
+        'role': data.get('role', 'guest'),
+        'is_active': data.get('is_active', True),
+        'email_verified': True,
+        'current_plan': 'free',
+        'created_at': '2024-01-15T00:00:00Z'
+    }
+    
+    return jsonify({
+        'success': True,
+        'message': 'User updated successfully',
+        'user': updated_user
+    })
+
 if __name__ == '__main__':
     print("Starting test server with CORS enabled...")
     print("Frontend origins allowed: http://localhost:3000, http://localhost:3001, http://localhost:3003")

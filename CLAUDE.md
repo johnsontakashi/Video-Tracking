@@ -4,16 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is an **Influencer Analytics Platform** - a comprehensive social media analytics system for tracking and analyzing 450k+ influencer profiles across Instagram, YouTube, TikTok, and Twitter. The platform features advanced sentiment analysis, real-time dashboards, payment integration, and automated data collection.
+This is an **Influencer Analytics Platform** - a comprehensive social media analytics system for tracking and analyzing influencer profiles across Instagram, YouTube, TikTok, and Twitter. The platform features user management, analytics dashboards, and role-based access control.
+
+**🚀 RECENTLY REFACTORED (Nov 2025)**: The codebase has been cleaned up and simplified for better maintainability.
 
 ## Architecture
 
-**Stack**: Flask (Python) + React (TypeScript) + PostgreSQL + Redis + Celery
-- **Backend**: Flask API with JWT authentication, role-based access control, Celery background tasks
-- **Frontend**: React with TypeScript, Ant Design UI components, drag-and-drop dashboards  
-- **Database**: PostgreSQL with partitioned analytics tables for performance
-- **Cache/Queue**: Redis for caching and Celery task management
-- **Deployment**: Docker containers with production-ready setup
+**Stack**: Flask (Python) + React (TypeScript) + SQLite (for development)
+- **Backend**: Clean Flask API (app.py) with token authentication, role-based access control
+- **Frontend**: React with TypeScript, Ant Design UI components, responsive dashboards  
+- **Database**: SQLite with automatic initialization and sample data
+- **Authentication**: Token-based authentication with proper validation
+- **File Structure**: Simplified with unnecessary files moved to backup_old_servers/
 
 ## Development Commands
 
@@ -39,14 +41,8 @@ npm test       # Run tests
 
 **Database**:
 ```bash
-# Start PostgreSQL and Redis
-docker-compose up postgres redis -d
-
-# Initialize database
-python scripts/init_db.py
-
-# Run migrations
-flask db upgrade
+# SQLite database is automatically initialized when running app.py
+# No additional setup required - database creates itself with sample data
 ```
 
 **Celery Workers**:
@@ -113,14 +109,25 @@ docker-compose restart
 
 ## Important Configuration
 
-**Environment Setup**: Copy `.env.example` to `.env` and configure:
-- Database credentials (PostgreSQL)
-- Redis password and connection
-- JWT secret keys (generate random strings for production)
-- Stripe API keys for payment processing  
-- Email configuration for notifications
+**Current Admin Credentials** (after refactoring):
+- **Admin**: admin@politikos.com / AdminPass123
+- **Analyst**: analyst@politikos.com / AnalystPass123  
+- **User**: user@politikos.com / UserPass123
 
-**Database Schema**: Key tables include partitioned `influencer_analytics` for time-series data, `users` with role-based access control, and `collection_tasks` for tracking data gathering jobs.
+**Environment Setup**: Basic setup with `.env` file (optional for development):
+- Database: SQLite (automatically created)
+- Authentication: Token-based (no additional config needed)
+- CORS: Pre-configured for localhost:3000, 3001, 3003
+
+**Simplified File Structure** (after cleanup):
+```
+backend/
+├── app.py              # Main clean Flask application (15KB)
+├── config.py           # Configuration settings
+├── run.py              # Alternative run script
+├── requirements.txt    # Python dependencies
+└── backup_old_servers/ # Old complex files moved here
+```
 
 ## Authentication & Security
 

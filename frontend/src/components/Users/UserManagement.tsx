@@ -221,11 +221,32 @@ const UserManagement: React.FC = () => {
 
   const handleSubmit = async (values: any) => {
     try {
+      // Check if we should use mock data
+      const useMockData = process.env.REACT_APP_USE_MOCK_DATA === 'true' || 
+                         process.env.NODE_ENV === 'development';
+      
+      if (useMockData) {
+        // Simulate API call with mock success
+        console.log('Mock user operation:', editingUser ? 'update' : 'create', values);
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        message.success(
+          editingUser 
+            ? 'User updated successfully (mock)' 
+            : 'User created successfully (mock)'
+        );
+        setIsModalVisible(false);
+        fetchUsers(); // This will refresh the mock data
+        return;
+      }
+      
+      // Real API call
       const token = localStorage.getItem('access_token');
       const method = editingUser ? 'PUT' : 'POST';
+      const baseUrl = process.env.REACT_APP_API_URL || '';
       const url = editingUser 
-        ? `/api/users/${editingUser.id}`
-        : '/api/users';
+        ? `${baseUrl}/api/users/${editingUser.id}`
+        : `${baseUrl}/api/users`;
 
       const response = await fetch(url, {
         method,
