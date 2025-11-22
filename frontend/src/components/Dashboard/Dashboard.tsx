@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../contexts/AuthContext';
+import DashboardNavigation from '../Navigation/DashboardNavigation';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -18,18 +19,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="dashboard">
-      <header className="dashboard-header">
-        <h1>Video Tracking Dashboard</h1>
-        <div className="user-info">
-          <span className="welcome-text">Welcome, {user.full_name}</span>
-          <span className="user-role">{user.role}</span>
-          <button onClick={handleLogout} className="logout-button">
-            Logout
-          </button>
-        </div>
-      </header>
-
+    <DashboardNavigation>
       <main className="dashboard-content">
         <div className="dashboard-grid">
           {/* User Profile Card */}
@@ -111,7 +101,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </main>
-    </div>
+    </DashboardNavigation>
   );
 };
 

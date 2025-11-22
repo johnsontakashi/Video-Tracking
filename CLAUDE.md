@@ -10,12 +10,17 @@ This is an **Influencer Analytics Platform** - a comprehensive social media anal
 
 ## Architecture
 
-**Stack**: Flask (Python) + React (TypeScript) + SQLite (for development)
-- **Backend**: Clean Flask API (app.py) with token authentication, role-based access control
+**Current Stack**: Flask (Python) + React (TypeScript) + SQLite (development)
+- **Backend**: Simplified Flask API (backend/app.py) with SQLite database, token authentication
 - **Frontend**: React with TypeScript, Ant Design UI components, responsive dashboards  
-- **Database**: SQLite with automatic initialization and sample data
-- **Authentication**: Token-based authentication with proper validation
-- **File Structure**: Simplified with unnecessary files moved to backup_old_servers/
+- **Database**: SQLite with automatic initialization (politikos_full.db)
+- **Authentication**: Simple token-based authentication
+- **File Structure**: Clean structure with complex legacy code moved to backup_old_servers/
+
+**Production Stack** (Docker Compose): Flask + React + PostgreSQL + Redis + Celery
+- **Database**: PostgreSQL with Redis for caching and task queues
+- **Background Tasks**: Celery workers with Flower monitoring
+- **Deployment**: Containerized with automated deployment scripts
 
 ## Development Commands
 
@@ -27,155 +32,129 @@ cd backend
 python -m venv venv
 source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-python app.py
+python app.py  # Starts on port 5000
 ```
 
 **Frontend (React/TypeScript)**:
 ```bash
 cd frontend
 npm install
-npm start      # Development server
+npm start      # Development server on port 3000
 npm run build  # Production build
 npm test       # Run tests
 ```
 
-**Database**:
-```bash
-# SQLite database is automatically initialized when running app.py
-# No additional setup required - database creates itself with sample data
-```
-
-**Celery Workers**:
-```bash
-cd backend
-celery -A app.celery worker --loglevel=info
-celery -A app.celery beat --loglevel=info
-```
+**Database**: SQLite database (politikos_full.db) is automatically created when running backend/app.py
 
 ### Production Deployment
 
 ```bash
-# Deploy entire stack
+# Deploy entire containerized stack
 chmod +x scripts/deploy.sh
 ./scripts/deploy.sh
 
-# Backup database
+# Database backup
 ./scripts/backup.sh --full
 
-# Health check
-./scripts/deploy.sh --health-check
-```
-
-### Container Management
-
-```bash
-# Start all services
-docker-compose up -d
-
-# Check service status  
-docker-compose ps
-
-# View logs
-docker-compose logs [service-name]
-
-# Restart services
-docker-compose restart
+# Container management
+docker-compose up -d         # Start all services
+docker-compose ps            # Check service status  
+docker-compose logs backend  # View specific service logs
+docker-compose restart      # Restart services
 ```
 
 ## Key Directory Structure
 
 ```
 ├── backend/                 # Flask API server
-│   ├── app/
-│   │   ├── models/         # SQLAlchemy database models
+│   ├── app.py              # Main simplified Flask application (SQLite-based)
+│   ├── app/                # Feature modules (complex architecture for production)
+│   │   ├── models/         # Database models (User, Influencer, Analytics, etc.)
 │   │   ├── services/       # Business logic and API services
 │   │   ├── collectors/     # Social media data collection modules
 │   │   ├── routes/         # API route definitions
 │   │   ├── tasks/          # Celery background tasks
-│   │   ├── utils/          # Utility functions
-│   │   └── middleware/     # Authentication and security middleware
-│   ├── migrations/         # Database migration files
+│   │   ├── utils/          # Authentication and utility functions
+│   │   └── middleware/     # Authentication middleware
+│   ├── backup_old_servers/ # Legacy complex implementations
 │   └── requirements.txt    # Python dependencies
-├── frontend/               # React application
+├── frontend/               # React TypeScript application
 │   ├── src/
-│   │   ├── components/     # React components (organized by feature)
+│   │   ├── components/     # Feature-organized React components
+│   │   │   ├── Analytics/  # Analytics dashboard components
+│   │   │   ├── Auth/       # Login/signup components
+│   │   │   ├── Dashboard/  # Main dashboard components
+│   │   │   ├── Influencers/ # Influencer management
+│   │   │   └── Navigation/ # Navigation components
 │   │   ├── services/       # API service functions
 │   │   ├── contexts/       # React Context providers (Auth, etc.)
-│   │   ├── utils/          # Frontend utility functions
-│   │   └── styles/         # CSS and styling
+│   │   └── utils/          # Frontend utility functions
 │   └── package.json        # Node.js dependencies
-└── scripts/                # Deployment and maintenance scripts
+├── scripts/                # Deployment and maintenance scripts
+│   ├── deploy.sh          # Production deployment script
+│   └── backup.sh          # Database backup script
+└── docker-compose.yml     # Container orchestration for production
 ```
 
-## Important Configuration
+## Current Configuration
 
-**Current Admin Credentials** (after refactoring):
+**Development Credentials** (SQLite backend/app.py):
 - **Admin**: admin@politikos.com / AdminPass123
 - **Analyst**: analyst@politikos.com / AnalystPass123  
 - **User**: user@politikos.com / UserPass123
 
-**Environment Setup**: Basic setup with `.env` file (optional for development):
-- Database: SQLite (automatically created)
-- Authentication: Token-based (no additional config needed)
+**Database**: SQLite (politikos_full.db) auto-created with sample data
+
+**Environment**: 
 - CORS: Pre-configured for localhost:3000, 3001, 3003
+- Authentication: Simple token-based authentication
+- Database: SQLite for development, PostgreSQL for production
 
-**Simplified File Structure** (after cleanup):
+**Current Architecture** (development):
 ```
-backend/
-├── app.py              # Main clean Flask application (15KB)
-├── config.py           # Configuration settings
-├── run.py              # Alternative run script
-├── requirements.txt    # Python dependencies
-└── backup_old_servers/ # Old complex files moved here
+backend/app.py (simplified SQLite)     # Main development server
+├── politikos_full.db                 # SQLite database file
+└── backup_old_servers/               # Complex implementations
 ```
 
-## Authentication & Security
+## Key Technical Details
 
-- **JWT-based authentication** with refresh tokens
-- **Role-based access control**: admin, analyst, guest roles
-- **Rate limiting** on API endpoints (Flask-Limiter)
-- **bcrypt password hashing** with configurable rounds
-- **Input validation** using Marshmallow schemas
+**Authentication**: Simple token-based auth in backend/app.py (bcrypt password hashing)
+**Database**: SQLite with auto-initialization, includes sample users and data
+**Frontend**: React + TypeScript + Ant Design components for UI
+**Styling**: Component-specific CSS files (e.g., AnalyticsDashboard.css)
 
-## Data Collection Features
+**Development Workflow**:
+1. Backend: `cd backend && python app.py` (starts SQLite-based server on port 5000)
+2. Frontend: `cd frontend && npm start` (React dev server on port 3000)
+3. Database auto-created as politikos_full.db with sample data
 
-- **Multi-platform support**: Instagram, YouTube, TikTok, Twitter APIs
-- **Proxy rotation** and rate limiting for web scraping
-- **Celery background tasks** for data collection queues
-- **Sentiment analysis** using TextBlob and NLTK (Portuguese/English)
-- **Fallback mechanisms** between API providers and web scraping
+**Production Architecture** (Docker Compose):
+- PostgreSQL database with Redis caching
+- Celery workers for background tasks
+- Flower monitoring on port 5555
+- Containerized deployment via scripts/deploy.sh
 
-## Frontend Architecture
+**Service Ports**:
+- Frontend: http://localhost:3000 (dev), http://localhost:3000 (prod container)
+- Backend API: http://localhost:5000
+- PostgreSQL: port 5432 (prod)
+- Redis: port 6379 (prod)
+- Flower monitoring: http://localhost:5555 (prod)
 
-- **React with TypeScript** for type safety
-- **Ant Design components** for consistent UI
-- **React Grid Layout** for drag-and-drop dashboards
-- **Chart.js/Recharts** for data visualization
-- **Context API** for state management (authentication, user data)
+# Development Notes
 
-## Production Considerations
+**Current State**: The project uses a simplified SQLite-based backend (backend/app.py) for development with a complete modular architecture (backend/app/) available for production use.
 
-- **Containerized deployment** with Docker Compose
-- **Database partitioning** for analytics tables by month
-- **Redis caching** for frequently accessed data
-- **Flower monitoring** for Celery task monitoring at port 5555
-- **Health checks** and automated monitoring scripts
-- **SSL certificate setup** via Let's Encrypt or self-signed for development
+**Code Architecture**:
+- Clean separation between development (SQLite) and production (PostgreSQL + Redis + Celery)
+- Component-based React frontend with TypeScript and Ant Design
+- Modular backend structure ready for scaling
 
-## Service Ports
+**Testing**: Use `npm test` in frontend directory. Backend tests depend on specific test framework implementation.
 
-- **Frontend**: http://localhost:3000 (dev), port 80 (prod)
-- **Backend API**: http://localhost:5000
-- **PostgreSQL**: port 5432
-- **Redis**: port 6379  
-- **Flower (Celery monitoring)**: http://localhost:5555
-
-## Common Development Tasks
-
-When working on this codebase:
-- **Always run linting/type checks** before committing changes
-- **Use existing component patterns** from the frontend codebase
-- **Follow the authentication middleware** for protected routes
-- **Test data collection features** in development mode first
-- **Check Celery task queues** via Flower when debugging background jobs
-- **Use database migrations** for schema changes via Flask-Migrate
+# important-instruction-reminders
+Do what has been asked; nothing more, nothing less.
+NEVER create files unless they're absolutely necessary for achieving your goal.
+ALWAYS prefer editing an existing file to creating a new one.
+NEVER proactively create documentation files (*.md) or README files. Only create documentation files if explicitly requested by the User.

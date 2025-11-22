@@ -32,7 +32,7 @@ import {
   CalendarOutlined
 } from '@ant-design/icons';
 import { useAuth } from '../../contexts/AuthContext';
-// Using native Date functions instead of moment
+import DashboardNavigation from '../Navigation/DashboardNavigation';
 import './UserManagement.css';
 
 const { Option } = Select;
@@ -501,8 +501,9 @@ const UserManagement: React.FC = () => {
   ];
 
   return (
-    <div className="user-management">
-      <Card
+    <DashboardNavigation>
+      <div className="user-management">
+        <Card
         title={
           <div className="page-header">
             <h2>User Management</h2>
@@ -675,8 +676,9 @@ const UserManagement: React.FC = () => {
             </Space>
           </div>
         </Form>
-      </Modal>
-    </div>
+        </Modal>
+      </div>
+    </DashboardNavigation>
   );
 };
 

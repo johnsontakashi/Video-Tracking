@@ -40,6 +40,7 @@ import {
   Legend
 } from 'recharts';
 import { useAuth } from '../../contexts/AuthContext';
+import DashboardNavigation from '../Navigation/DashboardNavigation';
 import './AnalyticsDashboard.css';
 
 const { Option } = Select;
@@ -248,17 +249,20 @@ const AnalyticsDashboard: React.FC = () => {
 
   if (loading || !analyticsData) {
     return (
-      <div className="analytics-dashboard">
-        <div className="loading-container">
-          <Spin size="large" />
-          <div style={{ marginTop: 16, color: '#666' }}>Loading analytics...</div>
+      <DashboardNavigation>
+        <div className="analytics-dashboard">
+          <div className="loading-container">
+            <Spin size="large" />
+            <div style={{ marginTop: 16, color: '#666' }}>Loading analytics...</div>
+          </div>
         </div>
-      </div>
+      </DashboardNavigation>
     );
   }
 
   return (
-    <div className="analytics-dashboard">
+    <DashboardNavigation>
+      <div className="analytics-dashboard">
       <div className="dashboard-header">
         <h2>Analytics Overview</h2>
         <Space>
@@ -430,7 +434,8 @@ const AnalyticsDashboard: React.FC = () => {
           </Card>
         </Col>
       </Row>
-    </div>
+      </div>
+    </DashboardNavigation>
   );
 };
 

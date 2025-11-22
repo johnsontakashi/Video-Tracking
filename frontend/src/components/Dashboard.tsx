@@ -7,6 +7,7 @@ import {
   FireOutlined,
   HeartOutlined
 } from '@ant-design/icons';
+import DashboardNavigation from './Navigation/DashboardNavigation';
 
 // Simple static widgets for now
 const SimpleWidget: React.FC<{ title: string; content: string; color: string }> = ({ title, content, color }) => (
@@ -82,18 +83,21 @@ const Dashboard: React.FC = () => {
 
   if (loading) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '60vh' 
-      }}>
-        <Spin size="large" tip="Loading Dashboard..." />
-      </div>
+      <DashboardNavigation>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          height: '60vh' 
+        }}>
+          <Spin size="large" tip="Loading Dashboard..." />
+        </div>
+      </DashboardNavigation>
     );
   }
 
   return (
+    <DashboardNavigation>
     <div style={{ padding: '24px' }}>
       <div style={{ 
         display: 'flex', 
@@ -206,6 +210,7 @@ const Dashboard: React.FC = () => {
         </div>
       </Card>
     </div>
+    </DashboardNavigation>
   );
 };
 
