@@ -42,26 +42,22 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({ children }) =
       {
         key: '/dashboard',
         icon: <DashboardOutlined />,
-        label: 'Dashboard',
-        onClick: () => navigate('/dashboard')
+        label: 'Dashboard'
       },
       {
         key: '/influencers',
         icon: <TeamOutlined />,
-        label: 'Influencers',
-        onClick: () => navigate('/influencers')
+        label: 'Influencers'
       },
       {
         key: '/analytics',
         icon: <BarChartOutlined />,
-        label: 'Analytics',
-        onClick: () => navigate('/analytics')
+        label: 'Analytics'
       },
       {
         key: '/subscription',
         icon: <CrownOutlined />,
-        label: 'Subscription',
-        onClick: () => navigate('/subscription')
+        label: 'Subscription'
       }
     ];
 
@@ -70,12 +66,29 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({ children }) =
       baseItems.push({
         key: '/users',
         icon: <SettingOutlined />,
-        label: 'User Management',
-        onClick: () => navigate('/users')
+        label: 'User Management'
       });
     }
 
     return baseItems;
+  };
+
+  // Handle menu click
+  const handleMenuClick = (e: any) => {
+    navigate(e.key);
+  };
+
+  // Handle dropdown menu clicks
+  const handleDropdownClick = (e: any) => {
+    if (e.key === 'logout') {
+      handleLogout();
+    } else if (e.key === 'profile') {
+      // Handle profile settings
+      console.log('Profile settings clicked');
+    } else if (e.key === 'notifications') {
+      // Handle notifications
+      console.log('Notifications clicked');
+    }
   };
 
   // User dropdown menu
@@ -98,9 +111,9 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({ children }) =
         key: 'logout',
         icon: <LogoutOutlined />,
         label: 'Logout',
-        onClick: handleLogout,
       },
     ],
+    onClick: handleDropdownClick,
   };
 
   const selectedKey = location.pathname;
@@ -122,6 +135,7 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({ children }) =
             selectedKeys={[selectedKey]}
             items={getMenuItems()}
             className="header-menu"
+            onClick={handleMenuClick}
           />
         </div>
 
@@ -147,6 +161,16 @@ const DashboardNavigation: React.FC<DashboardNavigationProps> = ({ children }) =
             <span className="welcome-text">Welcome, {user?.first_name}</span>
             <span className="user-role">{user?.role.toUpperCase()}</span>
           </div>
+
+          <Button
+            type="text"
+            icon={<LogoutOutlined />}
+            onClick={handleLogout}
+            className="logout-button"
+            title="Logout"
+          >
+            Logout
+          </Button>
 
           <Dropdown menu={userMenu} placement="bottomRight">
             <Avatar

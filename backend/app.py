@@ -18,7 +18,7 @@ load_dotenv()
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app, 
-     origins=['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3003'],
+     origins=['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3003', 'https://7d562251a9f3.ngrok-free.app/'],
      allow_headers=['Content-Type', 'Authorization'],
      methods=['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
      supports_credentials=True)
@@ -220,6 +220,79 @@ def login():
             'success': False,
             'error': 'internal_error',
             'message': 'Login failed'
+        }), 500
+
+@app.route('/api/auth/signup', methods=['POST'])
+def signup():
+    """User registration"""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        email = data.get('email', '').strip()
+        password = data.get('password', '')
+        first_name = data.get('first_name', '').strip()
+        last_name = data.get('last_name', '').strip()
+        role = data.get('role', 'user').strip()
+        
+        if not all([email, password, first_name, last_name]):
+            return jsonify({
+                'success': False,
+                'error': 'validation_error',
+                'message': 'All fields are required'
+            }), 400
+        
+        # Check if user already exists
+        db = get_db()
+        existing_user = db.execute(
+            'SELECT id FROM users WHERE email = ?', (email,)
+        ).fetchone()
+        
+        if existing_user:
+            return jsonify({
+                'success': False,
+                'error': 'user_exists',
+                'message': 'User with this email already exists'
+            }), 409
+        
+        # Hash password
+        password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+        
+        # Insert new user
+        cursor = db.execute(
+            '''INSERT INTO users (email, password, first_name, last_name, role, created_at)
+               VALUES (?, ?, ?, ?, ?, CURRENT_TIMESTAMP)''',
+            (email, password_hash, first_name, last_name, role)
+        )
+        user_id = cursor.lastrowid
+        db.commit()
+        
+        # Get the created user
+        user = db.execute(
+            'SELECT * FROM users WHERE id = ?', (user_id,)
+        ).fetchone()
+        
+        # Convert SQLite Row to dict and return user info and tokens
+        user_dict = dict(user)
+        user_response = {k: v for k, v in user_dict.items() if k != 'password'}
+        user_response['full_name'] = f"{user_dict['first_name']} {user_dict['last_name']}"
+        
+        return jsonify({
+            'success': True,
+            'access_token': f'mock_access_token_{user_dict["id"]}',
+            'refresh_token': f'mock_refresh_token_{user_dict["id"]}',
+            'token_type': 'Bearer',
+            'expires_in': 900,
+            'user': user_response,
+            'message': 'User registered successfully'
+        }), 201
+        
+    except Exception as e:
+        logger.error(f"Signup error: {str(e)}")
+        return jsonify({
+            'success': False,
+            'error': 'internal_error',
+            'message': 'Registration failed'
         }), 500
 
 @app.route('/api/auth/logout', methods=['POST'])

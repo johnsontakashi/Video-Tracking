@@ -12,7 +12,8 @@ import {
   message,
   Avatar,
   Tooltip,
-  Badge
+  Badge,
+  Radio
 } from 'antd';
 import {
   PlusOutlined,
@@ -516,20 +517,22 @@ const InfluencerList: React.FC = () => {
             name="platform"
             rules={[{ required: true, message: 'Platform is required' }]}
           >
-            <Select placeholder="Select platform">
-              <Option value="instagram">
-                {platformIcons.instagram} Instagram
-              </Option>
-              <Option value="youtube">
-                {platformIcons.youtube} YouTube
-              </Option>
-              <Option value="twitter">
-                {platformIcons.twitter} Twitter
-              </Option>
-              <Option value="tiktok">
-                {platformIcons.tiktok} TikTok
-              </Option>
-            </Select>
+            <Radio.Group size="large" style={{ width: '100%' }}>
+              <Space direction="horizontal" wrap style={{ width: '100%' }}>
+                <Radio.Button value="instagram" style={{ marginBottom: '8px' }}>
+                  📷 Instagram
+                </Radio.Button>
+                <Radio.Button value="youtube" style={{ marginBottom: '8px' }}>
+                  📺 YouTube
+                </Radio.Button>
+                <Radio.Button value="twitter" style={{ marginBottom: '8px' }}>
+                  🐦 Twitter
+                </Radio.Button>
+                <Radio.Button value="tiktok" style={{ marginBottom: '8px' }}>
+                  🎵 TikTok
+                </Radio.Button>
+              </Space>
+            </Radio.Group>
           </Form.Item>
 
           <Form.Item
